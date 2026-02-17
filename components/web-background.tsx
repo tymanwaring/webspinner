@@ -1,11 +1,12 @@
 "use client"
 
-import { SpiderFormation } from "@/components/spider-formation"
+import { SpiderWeb } from "@/components/spider-web"
 
 /**
- * WebBackground -- strategic spider-formation accents at specific positions
- * with minimal web-fragment arcs connecting them. No full-screen clutter;
- * the formations sit at corners/edges and glow in neon red.
+ * WebBackground -- Realistic intricate spider webs positioned at strategic
+ * corners/edges of the viewport. Three webs anchored to different corners
+ * with a gentle breathing animation. No full-screen clutter; webs sit at
+ * the periphery in delicate neon red, complementing the black widow theme.
  */
 export function WebBackground() {
   return (
@@ -19,61 +20,26 @@ export function WebBackground() {
         className="absolute left-1/2 top-[12%] h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
         style={{
           background:
-            "radial-gradient(circle, oklch(0.55 0.24 25 / 0.04) 0%, transparent 60%)",
+            "radial-gradient(circle, oklch(0.55 0.24 25 / 0.03) 0%, transparent 60%)",
         }}
       />
 
-      {/* --- Spider formation 1: top-right corner, facing inward --- */}
+      {/* --- Web 1: top-left corner -- the most visible, elegant web --- */}
       <div
-        className="absolute right-6 top-[18%] opacity-[0.12] md:right-12"
-        style={{ animation: "web-breathe 10s ease-in-out infinite" }}
+        className="absolute -left-2 -top-2 opacity-[0.14]"
+        style={{ animation: "web-breathe 12s ease-in-out infinite" }}
       >
-        <SpiderFormation size={100} mirror />
+        <SpiderWeb size={260} spokes={14} rings={8} anchor="tl" />
       </div>
 
-      {/* Connecting web-fragment arc from spider 1 toward centre */}
+      {/* Delicate trailing silk thread drifting from web 1 */}
       <svg
-        className="absolute right-0 top-[16%] h-[200px] w-[300px] opacity-[0.06]"
-        viewBox="0 0 300 200"
+        className="absolute left-[220px] top-[40px] h-[120px] w-[160px] opacity-[0.06]"
+        viewBox="0 0 160 120"
         fill="none"
       >
         <path
-          d="M 280 30 Q 200 10, 140 50 Q 80 90, 60 160"
-          stroke="var(--node-color)"
-          strokeWidth="0.8"
-          strokeLinecap="round"
-        />
-        <path
-          d="M 260 50 Q 180 40, 120 80 Q 70 120, 50 180"
-          stroke="var(--node-color)"
-          strokeWidth="0.5"
-          strokeLinecap="round"
-          strokeDasharray="6 8"
-        />
-      </svg>
-
-      {/* --- Spider formation 2: left side, mid-page --- */}
-      <div
-        className="absolute left-4 top-[52%] opacity-[0.10] md:left-10"
-        style={{ animation: "web-breathe 12s ease-in-out infinite 2s" }}
-      >
-        <SpiderFormation size={80} />
-      </div>
-
-      {/* Web-fragment arc from spider 2 */}
-      <svg
-        className="absolute left-0 top-[50%] h-[180px] w-[260px] opacity-[0.05]"
-        viewBox="0 0 260 180"
-        fill="none"
-      >
-        <path
-          d="M 20 30 Q 60 10, 120 40 Q 180 70, 220 150"
-          stroke="var(--node-color)"
-          strokeWidth="0.8"
-          strokeLinecap="round"
-        />
-        <path
-          d="M 30 60 Q 80 45, 140 70 Q 200 100, 240 170"
+          d="M 0 10 Q 40 5, 80 20 Q 120 40, 150 80"
           stroke="var(--node-color)"
           strokeWidth="0.5"
           strokeLinecap="round"
@@ -81,42 +47,44 @@ export function WebBackground() {
         />
       </svg>
 
-      {/* --- Spider formation 3: bottom-right, near contact/footer --- */}
+      {/* --- Web 2: bottom-right corner -- large, atmospheric --- */}
       <div
-        className="absolute bottom-[12%] right-8 opacity-[0.09] md:right-16"
-        style={{ animation: "web-breathe 11s ease-in-out infinite 4s" }}
+        className="absolute -bottom-2 -right-2 opacity-[0.11]"
+        style={{ animation: "web-breathe 14s ease-in-out infinite 3s" }}
       >
-        <SpiderFormation size={90} mirror />
+        <SpiderWeb size={300} spokes={16} rings={9} anchor="br" />
       </div>
 
-      {/* Web-fragment arc from spider 3 */}
+      {/* Trailing thread from web 2 */}
       <svg
-        className="absolute bottom-[10%] right-0 h-[160px] w-[240px] opacity-[0.04]"
-        viewBox="0 0 240 160"
+        className="absolute bottom-[260px] right-[240px] h-[100px] w-[140px] opacity-[0.05]"
+        viewBox="0 0 140 100"
         fill="none"
       >
         <path
-          d="M 220 20 Q 160 15, 100 50 Q 50 85, 30 140"
+          d="M 140 90 Q 100 85, 60 60 Q 30 40, 5 10"
           stroke="var(--node-color)"
-          strokeWidth="0.7"
+          strokeWidth="0.5"
           strokeLinecap="round"
+          strokeDasharray="3 5"
         />
       </svg>
 
-      {/* Tiny corner web in top-left for balance */}
-      <svg
-        className="absolute left-0 top-0 h-[120px] w-[120px] opacity-[0.05]"
-        viewBox="0 0 120 120"
-        fill="none"
+      {/* --- Web 3: top-right corner -- smaller, delicate accent --- */}
+      <div
+        className="absolute -right-2 -top-2 opacity-[0.08]"
+        style={{ animation: "web-breathe 10s ease-in-out infinite 1.5s" }}
       >
-        {/* Quarter-web: a few arcs and spokes radiating from corner */}
-        <path d="M 0 0 Q 40 5, 60 40" stroke="var(--node-color)" strokeWidth="0.6" />
-        <path d="M 0 0 Q 10 30, 30 60" stroke="var(--node-color)" strokeWidth="0.6" />
-        <path d="M 0 0 L 80 20" stroke="var(--node-color)" strokeWidth="0.4" />
-        <path d="M 0 0 L 20 80" stroke="var(--node-color)" strokeWidth="0.4" />
-        {/* Arc between the two spokes */}
-        <path d="M 60 15 Q 50 30, 18 55" stroke="var(--node-color)" strokeWidth="0.4" />
-      </svg>
+        <SpiderWeb size={180} spokes={10} rings={6} anchor="tr" />
+      </div>
+
+      {/* --- Web 4: bottom-left corner -- subtle balancing accent --- */}
+      <div
+        className="absolute -bottom-2 -left-2 opacity-[0.06]"
+        style={{ animation: "web-breathe 11s ease-in-out infinite 5s" }}
+      >
+        <SpiderWeb size={160} spokes={10} rings={5} anchor="bl" />
+      </div>
     </div>
   )
 }
