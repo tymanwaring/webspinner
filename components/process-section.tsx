@@ -8,7 +8,7 @@ import {
   Rocket,
 } from "lucide-react"
 import React, { useRef } from "react"
-import { useScroll, useTransform, motion, useInView } from "motion/react"
+import { motion, useInView } from "motion/react"
 import { processSteps } from "@/lib/data"
 import { SectionHeading } from "@/components/section-heading"
 import { SpringReveal } from "@/components/spring-reveal"
@@ -25,42 +25,53 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 /**
  * A vertical silk thread connecting the first timeline dot to the last.
- *
- * It measures the actual DOM positions of the first and last WebNode dots,
- * then absolutely positions the SVG to span exactly between them.
- * The path passes straight through each dot with subtle lateral drift.
+ * Uses a manual scroll listener (no useScroll / no ref target) to avoid
+ * the "Target ref not hydrated" error entirely. Measures dot positions
+ * to precisely span the thread from first dot centre to last dot centre.
  */
-function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivElement | null> }) {
+function SilkTimeline() {
   const reducedMotion = useReducedMotion()
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [progress, setProgress] = React.useState(0)
   const [bounds, setBounds] = React.useState<{ top: number; height: number } | null>(null)
 
-  // Window-level scroll with no target ref -- avoids "not hydrated" errors.
-  // Tighter range so the thread completes within the process section.
-  const { scrollYProgress } = useScroll()
-  const pathLength = useTransform(scrollYProgress, [0.12, 0.45], [0, 1])
-
-  // Measure from first dot to last dot on mount and resize
   React.useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
     function measure() {
-      const container = containerRef.current
-      if (!container) return
-      const dots = container.querySelectorAll<HTMLElement>("[data-timeline-dot]")
+      if (!section) return
+      const dots = section.querySelectorAll<HTMLElement>("[data-timeline-dot]")
       if (dots.length < 2) return
-      const first = dots[0]
-      const last = dots[dots.length - 1]
-      const containerRect = container.getBoundingClientRect()
-      const firstRect = first.getBoundingClientRect()
-      const lastRect = last.getBoundingClientRect()
-      const topOffset = firstRect.top + firstRect.height / 2 - containerRect.top
-      const bottomCentre = lastRect.top + lastRect.height / 2 - containerRect.top
+      const sectionRect = section.getBoundingClientRect()
+      const firstRect = dots[0].getBoundingClientRect()
+      const lastRect = dots[dots.length - 1].getBoundingClientRect()
+      const topOffset = firstRect.top + firstRect.height / 2 - sectionRect.top
+      const bottomCentre = lastRect.top + lastRect.height / 2 - sectionRect.top
       setBounds({ top: topOffset, height: bottomCentre - topOffset })
     }
-    measure()
-    window.addEventListener("resize", measure)
-    return () => window.removeEventListener("resize", measure)
-  }, [containerRef])
 
-  // Thread passes through 5 evenly-spaced dots (y = 0, 125, 250, 375, 500)
+    function onScroll() {
+      if (!section) return
+      const rect = section.getBoundingClientRect()
+      const viewH = window.innerHeight
+      // Progress 0 when section top enters bottom of viewport,
+      // progress 1 when section bottom reaches top of viewport
+      const total = rect.height + viewH
+      const scrolled = viewH - rect.top
+      setProgress(Math.max(0, Math.min(1, scrolled / total)))
+    }
+
+    measure()
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", () => { measure(); onScroll() })
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", measure)
+    }
+  }, [])
+
   const threadPath = [
     "M 50 0",
     "C 53 42, 47 83, 50 125",
@@ -69,68 +80,74 @@ function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivE
     "C 47 417, 53 458, 50 500",
   ].join(" ")
 
+  // Map section scroll progress to pathLength -- thread draws from ~20% to ~70%
+  const pathLength = reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - 0.2) / 0.5))
+
   return (
-    <div
-      className="pointer-events-none absolute left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
-      style={
-        bounds
-          ? { top: bounds.top, height: bounds.height }
-          : { top: 0, height: "100%", opacity: 0 }
-      }
-      aria-hidden="true"
-    >
-      <svg
-        viewBox="0 0 100 500"
-        preserveAspectRatio="none"
-        fill="none"
-        className="h-full w-full"
-        style={{ opacity: bounds ? 1 : 0 }}
+    <div ref={sectionRef} className="absolute inset-0" aria-hidden="true">
+      <div
+        className="pointer-events-none absolute left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
+        style={
+          bounds
+            ? { top: bounds.top, height: bounds.height }
+            : { top: 0, height: "100%", opacity: 0 }
+        }
       >
-        <defs>
-          <filter id="timeline-glow">
-            <feGaussianBlur stdDeviation="2" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+        <svg
+          viewBox="0 0 100 500"
+          preserveAspectRatio="none"
+          fill="none"
+          className="h-full w-full"
+          style={{ opacity: bounds ? 1 : 0 }}
+        >
+          <defs>
+            <filter id="timeline-glow">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
 
-        {/* Faint ghost trail */}
-        <path
-          d={threadPath}
-          stroke="var(--thread-color)"
-          strokeWidth="1"
-          strokeLinecap="round"
-          opacity="0.08"
-        />
+          {/* Faint ghost trail */}
+          <path
+            d={threadPath}
+            stroke="var(--thread-color)"
+            strokeWidth="1"
+            strokeLinecap="round"
+            opacity="0.08"
+          />
 
-        {/* Animated silk thread */}
-        <motion.path
-          d={threadPath}
-          stroke="var(--node-color)"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          filter="url(#timeline-glow)"
-          style={{
-            pathLength: reducedMotion ? 1 : pathLength,
-            opacity: 0.55,
-          }}
-        />
+          {/* Animated silk thread */}
+          <path
+            d={threadPath}
+            stroke="var(--node-color)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            filter="url(#timeline-glow)"
+            opacity="0.55"
+            strokeDasharray="1"
+            strokeDashoffset={1 - pathLength}
+            pathLength="1"
+            style={{ transition: "stroke-dashoffset 0.1s linear" }}
+          />
 
-        {/* Thicker glow behind */}
-        <motion.path
-          d={threadPath}
-          stroke="var(--node-color)"
-          strokeWidth="4"
-          strokeLinecap="round"
-          style={{
-            pathLength: reducedMotion ? 1 : pathLength,
-            opacity: 0.08,
-          }}
-          filter="url(#timeline-glow)"
-        />
-      </svg>
+          {/* Thicker glow behind */}
+          <path
+            d={threadPath}
+            stroke="var(--node-color)"
+            strokeWidth="4"
+            strokeLinecap="round"
+            filter="url(#timeline-glow)"
+            opacity="0.08"
+            strokeDasharray="1"
+            strokeDashoffset={1 - pathLength}
+            pathLength="1"
+            style={{ transition: "stroke-dashoffset 0.1s linear" }}
+          />
+        </svg>
+      </div>
     </div>
   )
 }
@@ -228,8 +245,6 @@ function WebNode() {
 }
 
 export function ProcessSection() {
-  const timelineContainerRef = useRef<HTMLDivElement>(null)
-
   return (
     <section id="process" className="relative px-6 py-24 md:px-12 md:py-32">
       <SpringReveal>
@@ -239,9 +254,9 @@ export function ProcessSection() {
         />
       </SpringReveal>
 
-      <div ref={timelineContainerRef} className="relative mx-auto max-w-4xl">
-        {/* Winding silk thread -- measured to span first dot to last dot */}
-        <SilkTimeline containerRef={timelineContainerRef} />
+      <div className="relative mx-auto max-w-4xl">
+        {/* Silk thread spanning first dot to last dot */}
+        <SilkTimeline />
 
         <div className="flex flex-col gap-16">
           {processSteps.map((step, index) => {

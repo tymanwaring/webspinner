@@ -12,10 +12,10 @@ export function WebBackground() {
   const reducedMotion = useReducedMotion()
   const { scrollYProgress } = useScroll()
 
-  // Hourglass draws quickly within the first 25% of scroll
+  // Hourglass draws quickly within the first 25% of scroll -- kept subtle
   const iconPath = useTransform(scrollYProgress, [0, 0.2], [0, 1])
-  const iconFill = useTransform(scrollYProgress, [0.1, 0.25], [0, 0.85])
-  const iconGlow = useTransform(scrollYProgress, [0.12, 0.25], [0, 0.6])
+  const iconFill = useTransform(scrollYProgress, [0.1, 0.25], [0, 0.25])
+  const iconGlow = useTransform(scrollYProgress, [0.12, 0.25], [0, 0.18])
 
   return (
     <div
@@ -180,7 +180,7 @@ export function WebBackground() {
             <stop offset="100%" stopColor="var(--node-color)" />
           </linearGradient>
           <filter id="hw-bg-glow">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feGaussianBlur stdDeviation="1.5" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
