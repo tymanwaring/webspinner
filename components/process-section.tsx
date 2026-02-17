@@ -31,11 +31,12 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
  * The path passes straight through each dot with subtle lateral drift.
  */
 function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivElement | null> }) {
-  const ref = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
   const [bounds, setBounds] = React.useState<{ top: number; height: number } | null>(null)
+  // Use the parent container as the scroll target -- it is always mounted
+  // before this child renders, avoiding the "ref not hydrated" error.
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: containerRef,
     offset: ["start end", "end start"],
   })
   const pathLength = useTransform(scrollYProgress, [0.05, 0.85], [0, 1])
@@ -74,7 +75,6 @@ function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivE
 
   return (
     <div
-      ref={ref}
       className="pointer-events-none absolute left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
       style={
         bounds
