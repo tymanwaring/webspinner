@@ -26,10 +26,10 @@ export function WebBackground() {
 
       {/* --- Web 1: top-left corner -- the most visible, elegant web --- */}
       <div
-        className="absolute -left-2 -top-2 opacity-[0.14]"
+        className="absolute -left-2 -top-2 opacity-[0.30]"
         style={{ animation: "web-breathe 12s ease-in-out infinite" }}
       >
-        <SpiderWeb size={260} spokes={14} rings={8} anchor="tl" />
+        <SpiderWeb size={300} spokes={14} rings={8} anchor="tl" />
       </div>
 
       {/* Delicate trailing silk thread drifting from web 1 */}
@@ -49,10 +49,10 @@ export function WebBackground() {
 
       {/* --- Web 2: bottom-right corner -- large, atmospheric --- */}
       <div
-        className="absolute -bottom-2 -right-2 opacity-[0.11]"
+        className="absolute -bottom-2 -right-2 opacity-[0.25]"
         style={{ animation: "web-breathe 14s ease-in-out infinite 3s" }}
       >
-        <SpiderWeb size={300} spokes={16} rings={9} anchor="br" />
+        <SpiderWeb size={340} spokes={16} rings={9} anchor="br" />
       </div>
 
       {/* Trailing thread from web 2 */}
@@ -72,18 +72,18 @@ export function WebBackground() {
 
       {/* --- Web 3: top-right corner -- smaller, delicate accent --- */}
       <div
-        className="absolute -right-2 -top-2 opacity-[0.08]"
+        className="absolute -right-2 -top-2 opacity-[0.18]"
         style={{ animation: "web-breathe 10s ease-in-out infinite 1.5s" }}
       >
-        <SpiderWeb size={180} spokes={10} rings={6} anchor="tr" />
+        <SpiderWeb size={220} spokes={10} rings={6} anchor="tr" />
       </div>
 
       {/* --- Web 4: bottom-left corner -- subtle balancing accent --- */}
       <div
-        className="absolute -bottom-2 -left-2 opacity-[0.06]"
+        className="absolute -bottom-2 -left-2 opacity-[0.15]"
         style={{ animation: "web-breathe 11s ease-in-out infinite 5s" }}
       >
-        <SpiderWeb size={160} spokes={10} rings={5} anchor="bl" />
+        <SpiderWeb size={200} spokes={10} rings={5} anchor="bl" />
       </div>
     </div>
   )

@@ -24,8 +24,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 }
 
 /**
- * A winding thread SVG that replaces the straight vertical line.
- * It draws progressively as the user scrolls through the section.
+ * A winding silk thread connecting the first timeline dot to the last.
+ * Uses top/bottom offsets so the thread starts/ends exactly at the dot
+ * positions rather than running beyond the container edges.
  */
 function SilkTimeline() {
   const ref = useRef<HTMLDivElement>(null)
@@ -36,18 +37,19 @@ function SilkTimeline() {
   })
   const pathLength = useTransform(scrollYProgress, [0.05, 0.85], [0, 1])
 
-  // A winding, organic S-curve path that snakes between left and right
+  // Winding S-curve between left/right -- starts at top-centre, ends at bottom-centre
   const windingPath =
-    "M 50 0 C 50 60, 80 80, 80 120 S 20 180, 20 240 S 80 300, 80 360 S 20 420, 20 480 S 80 540, 80 600 S 50 640, 50 700"
+    "M 50 10 C 50 70, 82 90, 80 140 S 20 200, 22 260 S 80 320, 78 380 S 20 440, 22 500 S 80 560, 50 620"
 
   return (
     <div
       ref={ref}
-      className="pointer-events-none absolute inset-y-0 left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
+      className="pointer-events-none absolute left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
+      style={{ top: "1rem", bottom: "1rem" }}
       aria-hidden="true"
     >
       <svg
-        viewBox="0 0 100 700"
+        viewBox="0 0 100 630"
         preserveAspectRatio="none"
         fill="none"
         className="h-full w-full"
@@ -68,7 +70,7 @@ function SilkTimeline() {
           stroke="var(--thread-color)"
           strokeWidth="1"
           strokeLinecap="round"
-          opacity="0.06"
+          opacity="0.08"
         />
 
         {/* Animated silk thread */}

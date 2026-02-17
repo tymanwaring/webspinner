@@ -98,7 +98,7 @@ export const projects = [
     tags: ["Next.js", "TypeScript", "D3.js", "WebSocket"],
     clientType: "Enterprise",
     category: "fintech",
-    accentColor: "oklch(0.65 0.15 200)",
+    accentColor: "oklch(0.55 0.24 25)",
   },
   {
     title: "Bloom E-Commerce Redesign",
@@ -107,7 +107,7 @@ export const projects = [
     tags: ["React", "Tailwind", "Shopify", "Framer Motion"],
     clientType: "Retail",
     category: "ecommerce",
-    accentColor: "oklch(0.70 0.15 150)",
+    accentColor: "oklch(0.50 0.20 20)",
   },
   {
     title: "Prism Design System",
@@ -116,7 +116,7 @@ export const projects = [
     tags: ["React", "Storybook", "Radix UI", "CSS Modules"],
     clientType: "SaaS",
     category: "design-system",
-    accentColor: "oklch(0.65 0.15 290)",
+    accentColor: "oklch(0.60 0.22 30)",
   },
   {
     title: "Nexus Health Portal",
@@ -125,7 +125,7 @@ export const projects = [
     tags: ["Next.js", "TypeScript", "Zod", "React Query"],
     clientType: "Healthcare",
     category: "healthcare",
-    accentColor: "oklch(0.65 0.18 170)",
+    accentColor: "oklch(0.45 0.18 15)",
   },
   {
     title: "Velocity Startup Landing Kit",
@@ -134,7 +134,7 @@ export const projects = [
     tags: ["Next.js", "Tailwind", "Vercel", "Posthog"],
     clientType: "Startup",
     category: "marketing",
-    accentColor: "oklch(0.70 0.18 50)",
+    accentColor: "oklch(0.55 0.24 25)",
   },
   {
     title: "Arcadia Learning Platform",
@@ -143,7 +143,7 @@ export const projects = [
     tags: ["React", "Monaco Editor", "WebRTC", "AI SDK"],
     clientType: "EdTech",
     category: "education",
-    accentColor: "oklch(0.60 0.15 260)",
+    accentColor: "oklch(0.50 0.16 10)",
   },
 ] as const
 
