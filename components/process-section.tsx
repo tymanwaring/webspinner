@@ -136,15 +136,15 @@ function WebFilament({
         </defs>
         <motion.path
           d={path}
-          stroke="var(--thread-color)"
-          strokeWidth={0.8}
+          stroke="var(--node-color)"
+          strokeWidth={0.6}
           strokeLinecap="round"
           fill="none"
           filter={`url(#fil-glow-${direction}-${index})`}
           initial={{ pathLength: 0, opacity: 0 }}
           animate={
             isInView
-              ? { pathLength: 1, opacity: 0.45 }
+              ? { pathLength: 1, opacity: 0.25 }
               : { pathLength: 0, opacity: 0 }
           }
           transition={
