@@ -39,9 +39,10 @@ function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivE
   // Wait one frame so the ref is hydrated before useScroll reads it
   React.useEffect(() => { setMounted(true) }, [])
 
-  // Window-level scroll, no target ref needed -- avoids hydration error
+  // Window-level scroll -- tighter input range so the thread draws faster,
+  // completing within the process section rather than across the entire page.
   const { scrollYProgress } = useScroll()
-  const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1])
+  const pathLength = useTransform(scrollYProgress, [0.15, 0.5], [0, 1])
 
   // Measure from first dot to last dot on mount and resize
   React.useEffect(() => {

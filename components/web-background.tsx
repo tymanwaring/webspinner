@@ -1,14 +1,21 @@
 "use client"
 
+import { motion, useScroll, useTransform } from "motion/react"
+import { useReducedMotion } from "@/lib/use-reduced-motion"
+
 /**
- * WebBackground -- A full-page static spider web rendered as a fixed SVG.
- * No scroll-driven animation, no winding/threading effect. Just a
- * delicate, always-visible web that provides atmosphere. The centre
- * area is kept lighter (lower stroke-width / opacity) while the
- * outer branches are slightly more visible.
+ * WebBackground -- A full-page static spider web rendered as a fixed SVG,
+ * with a scroll-driven hourglass icon that fills in at the centre.
  */
 export function WebBackground() {
   const stroke = "var(--node-color)"
+  const reducedMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll()
+
+  // Hourglass draws from 0-40% scroll
+  const iconPath = useTransform(scrollYProgress, [0, 0.4], [0, 1])
+  const iconFill = useTransform(scrollYProgress, [0.25, 0.5], [0, 0.85])
+  const iconGlow = useTransform(scrollYProgress, [0.3, 0.5], [0, 0.6])
 
   return (
     <div
@@ -164,6 +171,56 @@ export function WebBackground() {
 
 
         </g>
+
+        {/* ═══ CENTRE HOURGLASS ICON -- draws in as user scrolls ═══ */}
+        <defs>
+          <linearGradient id="hw-bg-grad" x1="500" y1="460" x2="500" y2="540" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="var(--node-color)" />
+            <stop offset="50%" stopColor="var(--node-color)" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="var(--node-color)" />
+          </linearGradient>
+          <filter id="hw-bg-glow">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Outer diamond frame */}
+        <motion.path
+          d="M 500 462 L 530 478 L 500 500 L 530 522 L 500 538 L 470 522 L 500 500 L 470 478 Z"
+          stroke="var(--node-color)"
+          strokeWidth="1.2"
+          strokeLinejoin="round"
+          fill="none"
+          filter="url(#hw-bg-glow)"
+          style={{
+            pathLength: reducedMotion ? 1 : iconPath,
+            opacity: reducedMotion ? 0.5 : iconGlow,
+          }}
+        />
+
+        {/* Inner hourglass fill */}
+        <motion.path
+          d="M 500 470 L 518 480 L 500 500 L 518 520 L 500 530 L 482 520 L 500 500 L 482 480 Z"
+          fill="url(#hw-bg-grad)"
+          filter="url(#hw-bg-glow)"
+          style={{
+            opacity: reducedMotion ? 0.4 : iconFill,
+            transformOrigin: "500px 500px",
+          }}
+        />
+
+        {/* Centre dot */}
+        <motion.circle
+          cx="500"
+          cy="500"
+          r="2"
+          fill="var(--color-foreground)"
+          style={{ opacity: reducedMotion ? 0.5 : iconGlow }}
+        />
       </svg>
     </div>
   )
