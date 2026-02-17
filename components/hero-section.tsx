@@ -41,16 +41,18 @@ export function HeroSection() {
               strokeWidth="0.8"
             />
           ))}
-          {/* Radial lines */}
-          {Array.from({ length: 12 }).map((_, i) => {
-            const angle = (Math.PI * 2 * i) / 12
+          {/* Radial lines -- pre-computed to avoid SSR/client hydration mismatch */}
+          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => {
+            const rad = (deg * Math.PI) / 180
+            const x2 = Math.round((300 + Math.cos(rad) * 260) * 100) / 100
+            const y2 = Math.round((300 + Math.sin(rad) * 260) * 100) / 100
             return (
               <line
-                key={i}
+                key={deg}
                 x1="300"
                 y1="300"
-                x2={300 + Math.cos(angle) * 260}
-                y2={300 + Math.sin(angle) * 260}
+                x2={x2}
+                y2={y2}
                 stroke="var(--thread-color)"
                 strokeWidth="0.5"
               />

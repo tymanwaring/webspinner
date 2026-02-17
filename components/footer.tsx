@@ -54,8 +54,7 @@ export function Footer() {
         <div className="flex flex-col items-center gap-1 text-center">
           <p className="text-sm text-muted-foreground">Woven with care</p>
           <p className="text-xs text-muted-foreground/60">
-            {"\u00A9"} {new Date().getFullYear()} Webspinner. All rights
-            reserved.
+            {"\u00A9"} 2026 Webspinner. All rights reserved.
           </p>
         </div>
       </div>
