@@ -7,7 +7,7 @@ import {
   Sparkles,
   Rocket,
 } from "lucide-react"
-import { useRef } from "react"
+import React, { useRef } from "react"
 import { useScroll, useTransform, motion, useInView } from "motion/react"
 import { processSteps } from "@/lib/data"
 import { SectionHeading } from "@/components/section-heading"
@@ -24,26 +24,46 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 }
 
 /**
- * A vertical silk thread connecting dot 1 through dot 5.
- * The container is pinned to `top: 1.25rem` and `bottom: 1.25rem`
- * so the SVG stretches exactly from the first to the last dot.
- * The path stays at x=50 (dead centre) with extremely subtle
- * lateral waviness so it reads as organic silk, not a rigid ruler.
+ * A vertical silk thread connecting the first timeline dot to the last.
  *
- * 5 dots at equal spacing --> y positions 0, 125, 250, 375, 500
- * with tiny control-point drift of +/-3px max.
+ * It measures the actual DOM positions of the first and last WebNode dots,
+ * then absolutely positions the SVG to span exactly between them.
+ * The path passes straight through each dot with subtle lateral drift.
  */
-function SilkTimeline() {
+function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivElement | null> }) {
   const ref = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
+  const [bounds, setBounds] = React.useState<{ top: number; height: number } | null>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   })
   const pathLength = useTransform(scrollYProgress, [0.05, 0.85], [0, 1])
 
-  // Thread passes exactly through each dot centre (x=50, y=0/125/250/375/500).
-  // Subtle lateral drift in control points only -- never at the dot anchors.
+  // Measure from first dot to last dot on mount and resize
+  React.useEffect(() => {
+    function measure() {
+      const container = containerRef.current
+      if (!container) return
+      const dots = container.querySelectorAll<HTMLElement>("[data-timeline-dot]")
+      if (dots.length < 2) return
+      const first = dots[0]
+      const last = dots[dots.length - 1]
+      const containerRect = container.getBoundingClientRect()
+      const firstRect = first.getBoundingClientRect()
+      const lastRect = last.getBoundingClientRect()
+      // Centre of first dot relative to container
+      const topOffset = firstRect.top + firstRect.height / 2 - containerRect.top
+      // Centre of last dot relative to container
+      const bottomCentre = lastRect.top + lastRect.height / 2 - containerRect.top
+      setBounds({ top: topOffset, height: bottomCentre - topOffset })
+    }
+    measure()
+    window.addEventListener("resize", measure)
+    return () => window.removeEventListener("resize", measure)
+  }, [containerRef])
+
+  // Thread passes through 5 evenly-spaced dots (y = 0, 125, 250, 375, 500)
   const threadPath = [
     "M 50 0",
     "C 53 42, 47 83, 50 125",
@@ -52,11 +72,13 @@ function SilkTimeline() {
     "C 47 417, 53 458, 50 500",
   ].join(" ")
 
+  if (!bounds) return null
+
   return (
     <div
       ref={ref}
       className="pointer-events-none absolute left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
-      style={{ top: "1.25rem", bottom: "1.25rem" }}
+      style={{ top: bounds.top, height: bounds.height }}
       aria-hidden="true"
     >
       <svg
@@ -207,6 +229,8 @@ function WebNode() {
 }
 
 export function ProcessSection() {
+  const timelineContainerRef = useRef<HTMLDivElement>(null)
+
   return (
     <section id="process" className="relative px-6 py-24 md:px-12 md:py-32">
       <SpringReveal>
@@ -216,9 +240,9 @@ export function ProcessSection() {
         />
       </SpringReveal>
 
-      <div className="relative mx-auto max-w-4xl">
-        {/* Winding silk thread timeline replacing the old straight line */}
-        <SilkTimeline />
+      <div ref={timelineContainerRef} className="relative mx-auto max-w-4xl">
+        {/* Winding silk thread -- measured to span first dot to last dot */}
+        <SilkTimeline containerRef={timelineContainerRef} />
 
         <div className="flex flex-col gap-16">
           {processSteps.map((step, index) => {
@@ -240,6 +264,7 @@ export function ProcessSection() {
                 >
                   {/* Web-junction node on the spine */}
                   <div
+                    data-timeline-dot
                     className="absolute left-4 top-4 md:left-1/2 md:-translate-x-1/2"
                     aria-hidden="true"
                   >
