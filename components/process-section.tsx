@@ -25,51 +25,63 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 /**
  * A vertical silk thread connecting the first timeline dot to the last.
- * Uses a manual scroll listener (no useScroll / no ref target) to avoid
- * the "Target ref not hydrated" error entirely. Measures dot positions
- * to precisely span the thread from first dot centre to last dot centre.
+ * Uses Framer Motion's useScroll with no target (window-level scroll)
+ * and transforms the progress to only animate when the process section
+ * is visible on screen.
  */
 function SilkTimeline() {
   const reducedMotion = useReducedMotion()
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const [progress, setProgress] = React.useState(0)
   const [bounds, setBounds] = React.useState<{ top: number; height: number } | null>(null)
+  const threadContainerRef = useRef<HTMLDivElement>(null)
 
+  // Measure dot positions on mount and when section is visible
   React.useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-
     function measure() {
+      if (!threadContainerRef.current) return
+      // Query dots from the parent ProcessSection siblings
+      const section = threadContainerRef.current.closest("section")
       if (!section) return
       const dots = section.querySelectorAll<HTMLElement>("[data-timeline-dot]")
       if (dots.length < 2) return
+
       const sectionRect = section.getBoundingClientRect()
       const firstRect = dots[0].getBoundingClientRect()
       const lastRect = dots[dots.length - 1].getBoundingClientRect()
+
       const topOffset = firstRect.top + firstRect.height / 2 - sectionRect.top
       const bottomCentre = lastRect.top + lastRect.height / 2 - sectionRect.top
       setBounds({ top: topOffset, height: bottomCentre - topOffset })
     }
 
-    function onScroll() {
+    const observer = new ResizeObserver(measure)
+    if (threadContainerRef.current?.closest("section")) {
+      observer.observe(threadContainerRef.current.closest("section")!)
+    }
+    measure()
+
+    return () => observer.disconnect()
+  }, [])
+
+  // Track scroll manually to avoid Motion's useScroll errors
+  const [pathProgress, setPathProgress] = React.useState(0)
+
+  React.useEffect(() => {
+    function handleScroll() {
+      if (!threadContainerRef.current) return
+      const section = threadContainerRef.current.closest("section")
       if (!section) return
+
       const rect = section.getBoundingClientRect()
-      const viewH = window.innerHeight
-      // Progress 0 when section top enters bottom of viewport,
-      // progress 1 when section bottom reaches top of viewport
-      const total = rect.height + viewH
-      const scrolled = viewH - rect.top
-      setProgress(Math.max(0, Math.min(1, scrolled / total)))
+      const vh = window.innerHeight
+      // Progress: 0 when section top is at bottom of screen,
+      // 1 when section bottom is at top of screen
+      const scrollProgress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)))
+      setPathProgress(scrollProgress)
     }
 
-    measure()
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", () => { measure(); onScroll() })
-    return () => {
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", measure)
-    }
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   const threadPath = [
@@ -80,25 +92,22 @@ function SilkTimeline() {
     "C 47 417, 53 458, 50 500",
   ].join(" ")
 
-  // Map section scroll progress to pathLength -- thread draws from ~20% to ~70%
-  const pathLength = reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - 0.2) / 0.5))
+  // Draw thread from 0.15 to 0.75 of the scroll progress
+  const pathLength = reducedMotion ? 1 : Math.max(0, Math.min(1, (pathProgress - 0.15) / 0.6))
+
+  if (!bounds) return null
 
   return (
-    <div ref={sectionRef} className="absolute inset-0" aria-hidden="true">
+    <div ref={threadContainerRef} aria-hidden="true">
       <div
         className="pointer-events-none absolute left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
-        style={
-          bounds
-            ? { top: bounds.top, height: bounds.height }
-            : { top: 0, height: "100%", opacity: 0 }
-        }
+        style={{ top: bounds.top, height: bounds.height }}
       >
         <svg
           viewBox="0 0 100 500"
           preserveAspectRatio="none"
           fill="none"
           className="h-full w-full"
-          style={{ opacity: bounds ? 1 : 0 }}
         >
           <defs>
             <filter id="timeline-glow">
@@ -119,7 +128,7 @@ function SilkTimeline() {
             opacity="0.08"
           />
 
-          {/* Animated silk thread */}
+          {/* Animated silk thread - uses strokeDasharray for smooth drawing */}
           <path
             d={threadPath}
             stroke="var(--node-color)"
@@ -127,10 +136,8 @@ function SilkTimeline() {
             strokeLinecap="round"
             filter="url(#timeline-glow)"
             opacity="0.55"
-            strokeDasharray="1"
-            strokeDashoffset={1 - pathLength}
-            pathLength="1"
-            style={{ transition: "stroke-dashoffset 0.1s linear" }}
+            strokeDasharray={`${pathLength * 1000} 1000`}
+            style={{ transition: "stroke-dasharray 0.05s linear" }}
           />
 
           {/* Thicker glow behind */}
@@ -141,10 +148,8 @@ function SilkTimeline() {
             strokeLinecap="round"
             filter="url(#timeline-glow)"
             opacity="0.08"
-            strokeDasharray="1"
-            strokeDashoffset={1 - pathLength}
-            pathLength="1"
-            style={{ transition: "stroke-dashoffset 0.1s linear" }}
+            strokeDasharray={`${pathLength * 1000} 1000`}
+            style={{ transition: "stroke-dasharray 0.05s linear" }}
           />
         </svg>
       </div>
