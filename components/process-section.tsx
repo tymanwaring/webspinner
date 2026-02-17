@@ -8,7 +8,7 @@ import {
   Rocket,
 } from "lucide-react"
 import React, { useRef } from "react"
-import { useScroll, useTransform, motion, useInView, type MotionValue } from "motion/react"
+import { useScroll, useTransform, motion, useInView } from "motion/react"
 import { processSteps } from "@/lib/data"
 import { SectionHeading } from "@/components/section-heading"
 import { SpringReveal } from "@/components/spring-reveal"
@@ -31,18 +31,13 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
  * The path passes straight through each dot with subtle lateral drift.
  */
 function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivElement | null> }) {
-  const sectionRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
   const [bounds, setBounds] = React.useState<{ top: number; height: number } | null>(null)
-  const [mounted, setMounted] = React.useState(false)
 
-  // Wait one frame so the ref is hydrated before useScroll reads it
-  React.useEffect(() => { setMounted(true) }, [])
-
-  // Window-level scroll -- tighter input range so the thread draws faster,
-  // completing within the process section rather than across the entire page.
+  // Window-level scroll with no target ref -- avoids "not hydrated" errors.
+  // Tighter range so the thread completes within the process section.
   const { scrollYProgress } = useScroll()
-  const pathLength = useTransform(scrollYProgress, [0.15, 0.5], [0, 1])
+  const pathLength = useTransform(scrollYProgress, [0.12, 0.45], [0, 1])
 
   // Measure from first dot to last dot on mount and resize
   React.useEffect(() => {
@@ -63,7 +58,7 @@ function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivE
     measure()
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
-  }, [containerRef, mounted])
+  }, [containerRef])
 
   // Thread passes through 5 evenly-spaced dots (y = 0, 125, 250, 375, 500)
   const threadPath = [

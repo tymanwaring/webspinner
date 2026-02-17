@@ -12,10 +12,10 @@ export function WebBackground() {
   const reducedMotion = useReducedMotion()
   const { scrollYProgress } = useScroll()
 
-  // Hourglass draws from 0-40% scroll
-  const iconPath = useTransform(scrollYProgress, [0, 0.4], [0, 1])
-  const iconFill = useTransform(scrollYProgress, [0.25, 0.5], [0, 0.85])
-  const iconGlow = useTransform(scrollYProgress, [0.3, 0.5], [0, 0.6])
+  // Hourglass draws quickly within the first 25% of scroll
+  const iconPath = useTransform(scrollYProgress, [0, 0.2], [0, 1])
+  const iconFill = useTransform(scrollYProgress, [0.1, 0.25], [0, 0.85])
+  const iconGlow = useTransform(scrollYProgress, [0.12, 0.25], [0, 0.6])
 
   return (
     <div

@@ -28,7 +28,7 @@ export function HourglassIcon({
       aria-hidden="true"
       initial={animated ? { opacity: 0, scale: 0.8 } : false}
       animate={animated ? { opacity: 1, scale: 1 } : false}
-      transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22, delay: 0.05 }}
     >
       <defs>
         <linearGradient id="hw-grad" x1="32" y1="8" x2="32" y2="56" gradientUnits="userSpaceOnUse">
@@ -55,7 +55,7 @@ export function HourglassIcon({
         filter="url(#hw-glow)"
         initial={animated ? { pathLength: 0 } : false}
         animate={animated ? { pathLength: 1 } : false}
-        transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+        transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }}
       />
 
       {/* Inner hourglass fill -- the signature red marking */}
@@ -65,7 +65,7 @@ export function HourglassIcon({
         filter="url(#hw-glow)"
         initial={animated ? { opacity: 0, scale: 0.6 } : false}
         animate={animated ? { opacity: 1, scale: 1 } : false}
-        transition={{ duration: 0.6, delay: 0.8 }}
+        transition={{ duration: 0.3, delay: 0.25 }}
         style={{ transformOrigin: "32px 32px" }}
       />
 
@@ -77,7 +77,7 @@ export function HourglassIcon({
         fill="var(--color-foreground)"
         initial={animated ? { opacity: 0 } : false}
         animate={animated ? { opacity: 0.8 } : false}
-        transition={{ delay: 1.2 }}
+        transition={{ delay: 0.4 }}
       />
     </motion.svg>
   )
