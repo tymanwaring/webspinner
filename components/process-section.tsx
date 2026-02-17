@@ -24,9 +24,14 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 }
 
 /**
- * A winding silk thread connecting the first timeline dot to the last.
- * Uses top/bottom offsets so the thread starts/ends exactly at the dot
- * positions rather than running beyond the container edges.
+ * A vertical silk thread connecting dot 1 through dot 5.
+ * The container is pinned to `top: 1.25rem` and `bottom: 1.25rem`
+ * so the SVG stretches exactly from the first to the last dot.
+ * The path stays at x=50 (dead centre) with extremely subtle
+ * lateral waviness so it reads as organic silk, not a rigid ruler.
+ *
+ * 5 dots at equal spacing --> y positions 0, 125, 250, 375, 500
+ * with tiny control-point drift of +/-3px max.
  */
 function SilkTimeline() {
   const ref = useRef<HTMLDivElement>(null)
@@ -37,19 +42,25 @@ function SilkTimeline() {
   })
   const pathLength = useTransform(scrollYProgress, [0.05, 0.85], [0, 1])
 
-  // Winding S-curve between left/right -- starts at top-centre, ends at bottom-centre
-  const windingPath =
-    "M 50 10 C 50 70, 82 90, 80 140 S 20 200, 22 260 S 80 320, 78 380 S 20 440, 22 500 S 80 560, 50 620"
+  // Thread passes exactly through each dot centre (x=50, y=0/125/250/375/500).
+  // Subtle lateral drift in control points only -- never at the dot anchors.
+  const threadPath = [
+    "M 50 0",
+    "C 53 42, 47 83, 50 125",
+    "C 53 167, 47 208, 50 250",
+    "C 47 292, 53 333, 50 375",
+    "C 47 417, 53 458, 50 500",
+  ].join(" ")
 
   return (
     <div
       ref={ref}
       className="pointer-events-none absolute left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
-      style={{ top: "1rem", bottom: "1rem" }}
+      style={{ top: "1.25rem", bottom: "1.25rem" }}
       aria-hidden="true"
     >
       <svg
-        viewBox="0 0 100 630"
+        viewBox="0 0 100 500"
         preserveAspectRatio="none"
         fill="none"
         className="h-full w-full"
@@ -66,7 +77,7 @@ function SilkTimeline() {
 
         {/* Faint ghost trail */}
         <path
-          d={windingPath}
+          d={threadPath}
           stroke="var(--thread-color)"
           strokeWidth="1"
           strokeLinecap="round"
@@ -75,7 +86,7 @@ function SilkTimeline() {
 
         {/* Animated silk thread */}
         <motion.path
-          d={windingPath}
+          d={threadPath}
           stroke="var(--node-color)"
           strokeWidth="1.5"
           strokeLinecap="round"
@@ -88,7 +99,7 @@ function SilkTimeline() {
 
         {/* Thicker glow behind */}
         <motion.path
-          d={windingPath}
+          d={threadPath}
           stroke="var(--node-color)"
           strokeWidth="4"
           strokeLinecap="round"
