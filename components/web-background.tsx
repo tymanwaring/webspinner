@@ -29,7 +29,7 @@ export function WebBackground() {
       const offsetX = reducedMotion ? 0 : (mouseRef.current.x - cx) * 0.008
       const offsetY = reducedMotion ? 0 : (mouseRef.current.y - cy) * 0.008
 
-      ctx.strokeStyle = "rgba(200, 200, 220, 0.04)"
+      ctx.strokeStyle = "rgba(220, 200, 190, 0.035)"
       ctx.lineWidth = 0.5
 
       // Concentric rings

@@ -3,6 +3,7 @@
 import { Github, Linkedin, Twitter, Mail } from "lucide-react"
 import { navigation, socialLinks } from "@/lib/data"
 import { MagneticWrapper } from "@/components/magnetic-wrapper"
+import { HourglassIcon } from "@/components/hourglass-icon"
 
 const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   Github,
@@ -50,8 +51,9 @@ export function Footer() {
           })}
         </div>
 
-        {/* Tagline + copyright */}
-        <div className="flex flex-col items-center gap-1 text-center">
+        {/* Brand + copyright */}
+        <div className="flex flex-col items-center gap-2 text-center">
+          <HourglassIcon size={24} animated={false} />
           <p className="text-sm text-muted-foreground">Woven with care</p>
           <p className="text-xs text-muted-foreground/60">
             {"\u00A9"} 2026 Webspinner. All rights reserved.

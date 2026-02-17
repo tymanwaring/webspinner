@@ -7,12 +7,13 @@ import {
   Sparkles,
   Rocket,
 } from "lucide-react"
+import { useRef } from "react"
+import { useScroll, useTransform, motion, useInView } from "motion/react"
 import { processSteps } from "@/lib/data"
 import { SectionHeading } from "@/components/section-heading"
 import { SpringReveal } from "@/components/spring-reveal"
 import { SilkCard } from "@/components/silk-card"
-import { SilkNode } from "@/components/silk-node"
-import { SilkConnector } from "@/components/silk-connector"
+import { useReducedMotion } from "@/lib/use-reduced-motion"
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Search,
@@ -20,6 +21,176 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Code,
   Sparkles,
   Rocket,
+}
+
+/**
+ * A winding thread SVG that replaces the straight vertical line.
+ * It draws progressively as the user scrolls through the section.
+ */
+function SilkTimeline() {
+  const ref = useRef<HTMLDivElement>(null)
+  const reducedMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  })
+  const pathLength = useTransform(scrollYProgress, [0.05, 0.85], [0, 1])
+
+  // A winding, organic S-curve path that snakes between left and right
+  const windingPath =
+    "M 50 0 C 50 60, 80 80, 80 120 S 20 180, 20 240 S 80 300, 80 360 S 20 420, 20 480 S 80 540, 80 600 S 50 640, 50 700"
+
+  return (
+    <div
+      ref={ref}
+      className="pointer-events-none absolute inset-y-0 left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 0 100 700"
+        preserveAspectRatio="none"
+        fill="none"
+        className="h-full w-full"
+      >
+        <defs>
+          <filter id="timeline-glow">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Faint ghost trail */}
+        <path
+          d={windingPath}
+          stroke="var(--thread-color)"
+          strokeWidth="1"
+          strokeLinecap="round"
+          opacity="0.06"
+        />
+
+        {/* Animated silk thread */}
+        <motion.path
+          d={windingPath}
+          stroke="var(--node-color)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          filter="url(#timeline-glow)"
+          style={{
+            pathLength: reducedMotion ? 1 : pathLength,
+            opacity: 0.55,
+          }}
+        />
+
+        {/* Thicker glow behind */}
+        <motion.path
+          d={windingPath}
+          stroke="var(--node-color)"
+          strokeWidth="4"
+          strokeLinecap="round"
+          style={{
+            pathLength: reducedMotion ? 1 : pathLength,
+            opacity: 0.08,
+          }}
+          filter="url(#timeline-glow)"
+        />
+      </svg>
+    </div>
+  )
+}
+
+/**
+ * A small web-like connector between the spine and the card,
+ * rendered as a curved filament rather than a straight line.
+ */
+function WebFilament({
+  direction,
+  index,
+}: {
+  direction: "left" | "right"
+  index: number
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: "-10%" })
+  const reducedMotion = useReducedMotion()
+
+  // Organic curving filament
+  const path =
+    direction === "right"
+      ? "M 0 20 C 15 12, 40 28, 55 16 S 75 22, 90 20"
+      : "M 90 20 C 75 12, 50 28, 35 16 S 15 22, 0 20"
+
+  return (
+    <div ref={ref} className="h-10 w-24" aria-hidden="true">
+      <svg viewBox="0 0 90 40" fill="none" className="h-full w-full">
+        <defs>
+          <filter id={`fil-glow-${direction}-${index}`}>
+            <feGaussianBlur stdDeviation="1" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <motion.path
+          d={path}
+          stroke="var(--thread-color)"
+          strokeWidth={0.8}
+          strokeLinecap="round"
+          fill="none"
+          filter={`url(#fil-glow-${direction}-${index})`}
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={
+            isInView
+              ? { pathLength: 1, opacity: 0.45 }
+              : { pathLength: 0, opacity: 0 }
+          }
+          transition={
+            reducedMotion
+              ? { duration: 0 }
+              : {
+                  pathLength: {
+                    duration: 0.8,
+                    delay: index * 0.12,
+                    ease: "easeOut",
+                  },
+                  opacity: { duration: 0.3, delay: index * 0.12 },
+                }
+          }
+        />
+      </svg>
+    </div>
+  )
+}
+
+/**
+ * A web-junction node that pulses when in view.
+ */
+function WebNode() {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: false, margin: "-15%" })
+
+  return (
+    <div ref={ref} className="relative h-4 w-4" aria-hidden="true">
+      {/* Outer ring */}
+      <motion.div
+        className="absolute inset-0 rounded-full border"
+        style={{ borderColor: "var(--node-color)" }}
+        animate={isInView ? { scale: [1, 1.6, 1], opacity: [0.6, 0, 0.6] } : {}}
+        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+      />
+      {/* Inner dot */}
+      <div
+        className="absolute inset-1 rounded-full"
+        style={{
+          background: "var(--node-color)",
+          boxShadow: "var(--node-glow)",
+        }}
+      />
+    </div>
+  )
 }
 
 export function ProcessSection() {
@@ -33,12 +204,8 @@ export function ProcessSection() {
       </SpringReveal>
 
       <div className="relative mx-auto max-w-4xl">
-        {/* Central vertical silk line (visible on all screens) */}
-        <div
-          className="absolute left-6 top-0 bottom-0 w-px md:left-1/2 md:-translate-x-px"
-          style={{ backgroundColor: "var(--thread-color)", opacity: 0.15 }}
-          aria-hidden="true"
-        />
+        {/* Winding silk thread timeline replacing the old straight line */}
+        <SilkTimeline />
 
         <div className="flex flex-col gap-16">
           {processSteps.map((step, index) => {
@@ -54,30 +221,30 @@ export function ProcessSection() {
                 <div
                   className={`relative flex items-start gap-6 pl-14 md:pl-0 ${
                     isEven
-                      ? "md:flex-row md:pr-[calc(50%+2rem)]"
-                      : "md:flex-row-reverse md:pl-[calc(50%+2rem)]"
+                      ? "md:flex-row md:pr-[calc(50%+2.5rem)]"
+                      : "md:flex-row-reverse md:pl-[calc(50%+2.5rem)]"
                   }`}
                 >
-                  {/* Node on the spine */}
+                  {/* Web-junction node on the spine */}
                   <div
                     className="absolute left-4 top-4 md:left-1/2 md:-translate-x-1/2"
                     aria-hidden="true"
                   >
-                    <SilkNode size={12} />
+                    <WebNode />
                   </div>
 
-                  {/* Connector */}
+                  {/* Web filament connector */}
                   <div
-                    className={`hidden md:block absolute top-5 ${
+                    className={`hidden md:block absolute top-3 ${
                       isEven
-                        ? "left-[calc(50%+6px)]"
-                        : "right-[calc(50%+6px)] rotate-180"
+                        ? "left-[calc(50%+8px)]"
+                        : "right-[calc(50%+8px)] scale-x-[-1]"
                     }`}
                     aria-hidden="true"
                   >
-                    <SilkConnector
+                    <WebFilament
                       direction={isEven ? "right" : "left"}
-                      delay={index * 0.15}
+                      index={index}
                     />
                   </div>
 

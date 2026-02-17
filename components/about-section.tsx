@@ -99,7 +99,7 @@ export function AboutSection() {
             <motion.span
               key={tech}
               whileHover={{
-                boxShadow: "0 0 12px oklch(0.65 0.15 290 / 0.25)",
+                boxShadow: "0 0 12px oklch(0.55 0.24 25 / 0.2)",
               }}
               className="rounded-full border border-border bg-muted/50 px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
             >

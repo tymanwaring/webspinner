@@ -4,6 +4,7 @@ import { motion } from "motion/react"
 import { ArrowDown, Github, Linkedin, Twitter, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { MagneticWrapper } from "@/components/magnetic-wrapper"
+import { HourglassIcon } from "@/components/hourglass-icon"
 import { socialLinks } from "@/lib/data"
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -19,33 +20,32 @@ export function HeroSection() {
       id="hero"
       className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-20 text-center"
     >
-      {/* Decorative radial web motif behind content */}
+      {/* Large decorative hourglass motif behind content */}
+      <div
+        className="pointer-events-none absolute inset-0 flex items-center justify-center"
+        aria-hidden="true"
+      >
+        <div
+          className="relative"
+          style={{ animation: "web-breathe 8s ease-in-out infinite" }}
+        >
+          <HourglassIcon size={420} animated={false} className="opacity-[0.04]" />
+        </div>
+      </div>
+
+      {/* Radiating silk threads from center -- decorative web strands */}
       <div
         className="pointer-events-none absolute inset-0 flex items-center justify-center"
         aria-hidden="true"
       >
         <svg
           viewBox="0 0 600 600"
-          className="h-[500px] w-[500px] opacity-[0.035]"
-          style={{ animation: "web-breathe 8s ease-in-out infinite" }}
+          className="h-[500px] w-[500px] opacity-[0.025]"
         >
-          {/* Concentric rings */}
-          {[80, 140, 200, 260].map((r) => (
-            <circle
-              key={r}
-              cx="300"
-              cy="300"
-              r={r}
-              fill="none"
-              stroke="var(--thread-color)"
-              strokeWidth="0.8"
-            />
-          ))}
-          {/* Radial lines -- pre-computed to avoid SSR/client hydration mismatch */}
           {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => {
             const rad = (deg * Math.PI) / 180
-            const x2 = Math.round((300 + Math.cos(rad) * 260) * 100) / 100
-            const y2 = Math.round((300 + Math.sin(rad) * 260) * 100) / 100
+            const x2 = Math.round((300 + Math.cos(rad) * 290) * 100) / 100
+            const y2 = Math.round((300 + Math.sin(rad) * 290) * 100) / 100
             return (
               <line
                 key={deg}
@@ -68,6 +68,15 @@ export function HeroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 60, damping: 20, delay: 0.4 }}
       >
+        {/* Animated brand icon */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", stiffness: 120, damping: 18, delay: 0.3 }}
+        >
+          <HourglassIcon size={56} animated={false} />
+        </motion.div>
+
         {/* Label */}
         <motion.span
           className="text-sm font-medium uppercase tracking-widest"
@@ -104,7 +113,7 @@ export function HeroSection() {
             <Button
               asChild
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className="bg-accent text-accent-foreground hover:bg-accent/85"
             >
               <a href="#process">See Our Process</a>
             </Button>

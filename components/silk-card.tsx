@@ -25,7 +25,7 @@ export function SilkCard({
       whileHover={{
         y: hoverLift ? -6 : 0,
         boxShadow:
-          "0 0 20px oklch(0.88 0.05 260 / 0.15), 0 0 40px oklch(0.65 0.15 290 / 0.08)",
+          "0 0 20px oklch(0.55 0.24 25 / 0.12), 0 0 40px oklch(0.55 0.24 25 / 0.06)",
       }}
       whileTap={{
         scaleX: 1.02,

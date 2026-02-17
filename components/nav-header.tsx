@@ -5,6 +5,7 @@ import { Menu } from "lucide-react"
 import { motion } from "motion/react"
 import { navigation } from "@/lib/data"
 import { MagneticWrapper } from "@/components/magnetic-wrapper"
+import { HourglassIcon } from "@/components/hourglass-icon"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -31,7 +32,7 @@ export function NavHeader() {
       className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-4 transition-colors duration-300 md:px-12"
       style={{
         backgroundColor: scrolled
-          ? "oklch(0.10 0.015 260 / 0.85)"
+          ? "oklch(0.08 0.01 15 / 0.9)"
           : "transparent",
         backdropFilter: scrolled ? "blur(12px)" : "none",
       }}
@@ -39,31 +40,16 @@ export function NavHeader() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
     >
-      {/* Wordmark */}
+      {/* Brand mark */}
       <a
         href="#"
-        className="group flex items-center gap-2"
+        className="group flex items-center gap-2.5"
         aria-label="Webspinner - Back to top"
       >
+        <HourglassIcon size={28} animated={false} />
         <span className="text-xl font-bold tracking-tight text-foreground">
           Webspinner
         </span>
-        <svg
-          viewBox="0 0 40 6"
-          fill="none"
-          className="h-1.5 w-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          aria-hidden="true"
-        >
-          <motion.path
-            d="M 0 3 L 40 3"
-            stroke="var(--node-color)"
-            strokeWidth={2}
-            strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            whileHover={{ pathLength: 1 }}
-            transition={{ duration: 0.4 }}
-          />
-        </svg>
       </a>
 
       {/* Desktop navigation */}
@@ -94,7 +80,10 @@ export function NavHeader() {
         </SheetTrigger>
         <SheetContent side="right" className="border-border bg-background">
           <SheetHeader>
-            <SheetTitle className="text-foreground">Webspinner</SheetTitle>
+            <SheetTitle className="flex items-center gap-2 text-foreground">
+              <HourglassIcon size={22} animated={false} />
+              Webspinner
+            </SheetTitle>
           </SheetHeader>
           <nav className="flex flex-col gap-2 p-4" aria-label="Mobile navigation">
             {navigation.map((item) => (

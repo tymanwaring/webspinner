@@ -33,7 +33,7 @@ export function TeamMemberCard({
       <Avatar className="h-16 w-16">
         <AvatarFallback
           className="text-lg font-semibold text-foreground"
-          style={{ backgroundColor: "oklch(0.65 0.15 290 / 0.15)" }}
+          style={{ backgroundColor: "oklch(0.55 0.24 25 / 0.12)" }}
         >
           {initials}
         </AvatarFallback>
