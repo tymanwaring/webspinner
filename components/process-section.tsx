@@ -8,7 +8,7 @@ import {
   Rocket,
 } from "lucide-react"
 import React, { useRef } from "react"
-import { useScroll, useTransform, motion, useInView } from "motion/react"
+import { useScroll, useTransform, motion, useInView, type MotionValue } from "motion/react"
 import { processSteps } from "@/lib/data"
 import { SectionHeading } from "@/components/section-heading"
 import { SpringReveal } from "@/components/spring-reveal"
@@ -31,15 +31,17 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
  * The path passes straight through each dot with subtle lateral drift.
  */
 function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivElement | null> }) {
+  const sectionRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
   const [bounds, setBounds] = React.useState<{ top: number; height: number } | null>(null)
-  // Use the parent container as the scroll target -- it is always mounted
-  // before this child renders, avoiding the "ref not hydrated" error.
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  })
-  const pathLength = useTransform(scrollYProgress, [0.05, 0.85], [0, 1])
+  const [mounted, setMounted] = React.useState(false)
+
+  // Wait one frame so the ref is hydrated before useScroll reads it
+  React.useEffect(() => { setMounted(true) }, [])
+
+  // Window-level scroll, no target ref needed -- avoids hydration error
+  const { scrollYProgress } = useScroll()
+  const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1])
 
   // Measure from first dot to last dot on mount and resize
   React.useEffect(() => {
@@ -53,16 +55,14 @@ function SilkTimeline({ containerRef }: { containerRef: React.RefObject<HTMLDivE
       const containerRect = container.getBoundingClientRect()
       const firstRect = first.getBoundingClientRect()
       const lastRect = last.getBoundingClientRect()
-      // Centre of first dot relative to container
       const topOffset = firstRect.top + firstRect.height / 2 - containerRect.top
-      // Centre of last dot relative to container
       const bottomCentre = lastRect.top + lastRect.height / 2 - containerRect.top
       setBounds({ top: topOffset, height: bottomCentre - topOffset })
     }
     measure()
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
-  }, [containerRef])
+  }, [containerRef, mounted])
 
   // Thread passes through 5 evenly-spaced dots (y = 0, 125, 250, 375, 500)
   const threadPath = [

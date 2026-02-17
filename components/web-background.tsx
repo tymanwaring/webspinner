@@ -1,38 +1,14 @@
 "use client"
 
-import { useScroll, useTransform, motion, useReducedMotion } from "motion/react"
-
 /**
- * WebBackground -- A full-page spider web that dynamically weaves itself
- * as the user scrolls. The centre is faded to transparent using a radial
- * mask so the hub area (which maps to the top of the viewport) stays clean
- * and uncluttered, while the branching strands and outer rings provide
- * depth at the periphery.
+ * WebBackground -- A full-page static spider web rendered as a fixed SVG.
+ * No scroll-driven animation, no winding/threading effect. Just a
+ * delicate, always-visible web that provides atmosphere. The centre
+ * area is kept lighter (lower stroke-width / opacity) while the
+ * outer branches are slightly more visible.
  */
 export function WebBackground() {
-  const reducedMotion = useReducedMotion()
-  const { scrollYProgress } = useScroll()
-
-  // Spokes draw from 0-40% of scroll
-  const spokeProgress = useTransform(scrollYProgress, [0, 0.4], [0, 1])
-  // Outer ring layers staggered across the scroll range
-  const ring3 = useTransform(scrollYProgress, [0.2, 0.5], [0, 1])
-  const ring4 = useTransform(scrollYProgress, [0.3, 0.65], [0, 1])
-  const ring5 = useTransform(scrollYProgress, [0.4, 0.8], [0, 1])
-  // Wisps appear last
-  const wispProgress = useTransform(scrollYProgress, [0.6, 0.9], [0, 1])
-
-  // Slow rotation synced to scroll
-  const rotation = useTransform(scrollYProgress, [0, 1], [0, 25])
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1.04, 0.98])
-
   const stroke = "var(--node-color)"
-
-  const sp = reducedMotion ? 1 : spokeProgress
-  const r3 = reducedMotion ? 1 : ring3
-  const r4 = reducedMotion ? 1 : ring4
-  const r5 = reducedMotion ? 1 : ring5
-  const wp = reducedMotion ? 1 : wispProgress
 
   return (
     <div
@@ -40,65 +16,53 @@ export function WebBackground() {
       role="presentation"
       aria-hidden="true"
     >
-      <motion.svg
+      <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1000 1000"
         preserveAspectRatio="xMidYMid slice"
         fill="none"
-        style={reducedMotion ? {} : { rotate: rotation, scale }}
       >
         <defs>
           <filter id="web-bg-glow">
-            <feGaussianBlur stdDeviation="0.8" result="blur" />
+            <feGaussianBlur stdDeviation="0.6" result="blur" />
             <feComposite in="blur" in2="SourceGraphic" operator="over" />
           </filter>
-          {/* Radial mask: centre is transparent, edges are visible */}
-          <radialGradient id="centre-fade">
-            <stop offset="0%" stopColor="black" />
-            <stop offset="25%" stopColor="black" />
-            <stop offset="42%" stopColor="white" />
-            <stop offset="100%" stopColor="white" />
-          </radialGradient>
-          <mask id="fade-centre">
-            <rect width="1000" height="1000" fill="url(#centre-fade)" />
-          </mask>
         </defs>
 
-        <g filter="url(#web-bg-glow)" mask="url(#fade-centre)">
+        <g filter="url(#web-bg-glow)">
 
           {/* ═══ RADIAL SPOKES ═══ */}
           {[
-            { d: "M 500 500 Q 490 340, 470 60",  w: "0.5", o: 0.06 },
-            { d: "M 500 500 Q 510 320, 540 20",   w: "0.4", o: 0.05 },
-            { d: "M 500 500 Q 460 360, 360 30",   w: "0.4", o: 0.04 },
-            { d: "M 500 500 Q 580 380, 740 80",   w: "0.5", o: 0.06 },
-            { d: "M 500 500 Q 620 400, 860 180",  w: "0.4", o: 0.05 },
-            { d: "M 500 500 Q 640 440, 950 290",  w: "0.4", o: 0.04 },
-            { d: "M 500 500 Q 660 490, 960 470",  w: "0.5", o: 0.06 },
-            { d: "M 500 500 Q 660 520, 980 560",  w: "0.4", o: 0.05 },
-            { d: "M 500 500 Q 620 600, 870 840",  w: "0.5", o: 0.06 },
-            { d: "M 500 500 Q 580 630, 740 940",  w: "0.4", o: 0.05 },
-            { d: "M 500 500 Q 640 560, 960 720",  w: "0.4", o: 0.04 },
-            { d: "M 500 500 Q 510 680, 530 960",  w: "0.5", o: 0.06 },
-            { d: "M 500 500 Q 480 660, 440 980",  w: "0.4", o: 0.05 },
-            { d: "M 500 500 Q 540 680, 620 970",  w: "0.4", o: 0.04 },
-            { d: "M 500 500 Q 380 600, 140 830",  w: "0.5", o: 0.06 },
-            { d: "M 500 500 Q 420 620, 260 920",  w: "0.4", o: 0.05 },
-            { d: "M 500 500 Q 340 510, 40 540",   w: "0.5", o: 0.06 },
-            { d: "M 500 500 Q 340 480, 20 440",   w: "0.4", o: 0.05 },
-            { d: "M 500 500 Q 360 550, 60 680",   w: "0.4", o: 0.04 },
-            { d: "M 500 500 Q 380 380, 120 120",  w: "0.5", o: 0.06 },
-            { d: "M 500 500 Q 420 400, 200 200",  w: "0.4", o: 0.05 },
-            { d: "M 500 500 Q 360 440, 50 320",   w: "0.4", o: 0.04 },
+            { d: "M 500 500 Q 490 340, 470 60",  w: 0.5, o: 0.05 },
+            { d: "M 500 500 Q 510 320, 540 20",   w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 460 360, 360 30",   w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 580 380, 740 80",   w: 0.5, o: 0.05 },
+            { d: "M 500 500 Q 620 400, 860 180",  w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 640 440, 950 290",  w: 0.4, o: 0.035 },
+            { d: "M 500 500 Q 660 490, 960 470",  w: 0.5, o: 0.05 },
+            { d: "M 500 500 Q 660 520, 980 560",  w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 620 600, 870 840",  w: 0.5, o: 0.05 },
+            { d: "M 500 500 Q 580 630, 740 940",  w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 640 560, 960 720",  w: 0.4, o: 0.035 },
+            { d: "M 500 500 Q 510 680, 530 960",  w: 0.5, o: 0.05 },
+            { d: "M 500 500 Q 480 660, 440 980",  w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 540 680, 620 970",  w: 0.4, o: 0.035 },
+            { d: "M 500 500 Q 380 600, 140 830",  w: 0.5, o: 0.05 },
+            { d: "M 500 500 Q 420 620, 260 920",  w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 340 510, 40 540",   w: 0.5, o: 0.05 },
+            { d: "M 500 500 Q 340 480, 20 440",   w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 360 550, 60 680",   w: 0.4, o: 0.035 },
+            { d: "M 500 500 Q 380 380, 120 120",  w: 0.5, o: 0.05 },
+            { d: "M 500 500 Q 420 400, 200 200",  w: 0.4, o: 0.04 },
+            { d: "M 500 500 Q 360 440, 50 320",   w: 0.4, o: 0.035 },
           ].map((s, i) => (
-            <motion.path
+            <path
               key={`spoke-${i}`}
               d={s.d}
               stroke={stroke}
               strokeWidth={s.w}
               opacity={s.o}
               strokeLinecap="round"
-              style={{ pathLength: sp }}
             />
           ))}
 
@@ -113,14 +77,13 @@ export function WebBackground() {
             "M 724 408 Q 684 316, 576 282",
             "M 576 282 Q 510 270, 460 282",
           ].map((d, i) => (
-            <motion.path
+            <path
               key={`r3-${i}`}
               d={d}
               stroke={stroke}
               strokeWidth="0.35"
-              opacity={i % 2 === 0 ? 0.04 : 0.035}
+              opacity={0.035}
               strokeLinecap="round"
-              style={{ pathLength: r3 }}
             />
           ))}
 
@@ -135,14 +98,13 @@ export function WebBackground() {
             "M 852 372 Q 798 232, 636 168",
             "M 636 168 Q 530 136, 442 164",
           ].map((d, i) => (
-            <motion.path
+            <path
               key={`r4-${i}`}
               d={d}
               stroke={stroke}
               strokeWidth="0.3"
-              opacity={i % 2 === 0 ? 0.035 : 0.03}
+              opacity={0.03}
               strokeLinecap="round"
-              style={{ pathLength: r4 }}
             />
           ))}
 
@@ -157,14 +119,13 @@ export function WebBackground() {
             "M 962 334 Q 898 148, 690 56",
             "M 690 56  Q 550 10, 430 44",
           ].map((d, i) => (
-            <motion.path
+            <path
               key={`r5-${i}`}
               d={d}
               stroke={stroke}
               strokeWidth="0.3"
-              opacity={i % 2 === 0 ? 0.03 : 0.025}
+              opacity={0.025}
               strokeLinecap="round"
-              style={{ pathLength: r5 }}
             />
           ))}
 
@@ -179,19 +140,22 @@ export function WebBackground() {
             "M 140 830 Q 118 854, 96  876",
             "M 740 80  Q 754 62,  770 42",
           ].map((d, i) => (
-            <motion.path
+            <path
               key={`wisp-${i}`}
               d={d}
               stroke={stroke}
               strokeWidth="0.25"
               strokeDasharray="3 5"
-              opacity={i < 4 ? 0.03 : 0.025}
+              opacity={0.025}
               strokeLinecap="round"
-              style={{ pathLength: wp }}
             />
           ))}
+
+          {/* ═══ HUB ═══ */}
+          <circle cx="500" cy="500" r="3" fill={stroke} opacity="0.04" />
+          <circle cx="500" cy="500" r="1" fill={stroke} opacity="0.06" />
         </g>
-      </motion.svg>
+      </svg>
     </div>
   )
 }
