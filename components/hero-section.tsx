@@ -33,31 +33,31 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Radiating silk threads from center -- decorative web strands */}
+      {/* Radiating silk threads from center -- minimal decorative web strands */}
       <div
         className="pointer-events-none absolute inset-0 flex items-center justify-center"
         aria-hidden="true"
       >
         <svg
           viewBox="0 0 600 600"
-          className="h-[500px] w-[500px] opacity-[0.025]"
+          className="h-[500px] w-[500px] opacity-[0.03]"
+          fill="none"
         >
-          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => {
-            const rad = (deg * Math.PI) / 180
-            const x2 = Math.round((300 + Math.cos(rad) * 290) * 100) / 100
-            const y2 = Math.round((300 + Math.sin(rad) * 290) * 100) / 100
-            return (
-              <line
-                key={deg}
-                x1="300"
-                y1="300"
-                x2={x2}
-                y2={y2}
-                stroke="var(--thread-color)"
-                strokeWidth="0.5"
-              />
-            )
-          })}
+          {/* Pre-computed endpoints to avoid SSR/client floating-point mismatch */}
+          {[
+            [300, 10], [551.07, 155], [590, 300], [551.07, 445],
+            [300, 590], [48.93, 445], [10, 300], [48.93, 155],
+          ].map(([x, y], i) => (
+            <line
+              key={i}
+              x1="300"
+              y1="300"
+              x2={String(x)}
+              y2={String(y)}
+              stroke="var(--thread-color)"
+              strokeWidth="0.5"
+            />
+          ))}
         </svg>
       </div>
 

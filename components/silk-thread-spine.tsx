@@ -38,7 +38,7 @@ export function SilkThreadSpine() {
         fill="none"
         preserveAspectRatio="none"
         className="h-full w-full"
-        style={{ opacity: 0.5 }}
+        style={{ opacity: 0.35 }}
       >
         <defs>
           <filter id="silk-glow">
