@@ -11,21 +11,21 @@ const steps = [
   {
     number: "02",
     icon: Scissors,
-    title: "Untie with Intention",
+    title: "Untanglit with Care",
     description:
       "No wild cutting. We choose the smartest order of operations so each fix makes the next one easier.",
   },
   {
     number: "03",
     icon: Sparkles,
-    title: "Polish & Smooth",
+    title: "Smooth the Strands",
     description:
       "Once untangled, we refine. Clean code, clear documentation, optimized performance, and beautiful interfaces.",
   },
   {
     number: "04",
     icon: Rocket,
-    title: "Ship It Smooth",
+    title: "Launch Untangled",
     description:
       "You launch with confidence, plus docs and handoff support so your team keeps things beautifully untangled.",
   },

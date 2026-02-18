@@ -1,4 +1,4 @@
-import { Code, Layers, Zap, Palette, ShieldCheck, BarChart3 } from "lucide-react"
+import { Code, Layers, Zap, Palette, Database, BarChart3 } from "lucide-react"
 
 const services = [
   {
@@ -30,15 +30,15 @@ const services = [
     color: "bg-primary/10 text-primary",
   },
   {
-    icon: ShieldCheck,
-    title: "Security Untwisting",
+    icon: Database,
+    title: "API & Data Stitching",
     description:
-      "Tangled security vulnerabilities? We audit, patch, and fortify your web apps against threats.",
+      "Need backend support too? We stitch APIs and data flows cleanly so your frontend stays fast, stable, and easy to build on.",
     color: "bg-secondary/10 text-secondary",
   },
   {
     icon: BarChart3,
-    title: "SEO Unsnarling",
+    title: "SEO Straightening",
     description:
       "Rankings in a twist? We untangle your SEO, fix technical issues, and boost your visibility.",
     color: "bg-accent/10 text-accent-foreground",
@@ -59,8 +59,7 @@ export function Services() {
             <span className="text-muted-foreground">We bring the patient hands.</span>
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            From legacy code to tangled user experiences, we specialize in the web problems
-            everyone else walks away from.
+            Frontend-first and performance-obsessed, we untangle messy UI codebases and support the backend touchpoints needed to keep everything humming.
           </p>
         </div>
 

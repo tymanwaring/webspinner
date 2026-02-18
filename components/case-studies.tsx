@@ -2,34 +2,38 @@ import { ArrowUpRight } from "lucide-react"
 
 const cases = [
   {
-    tag: "E-Commerce",
-    title: "ShopWell Marketplace",
-    before: "A legacy monolith with 12-second load times and checkout drop-off rates of 68%.",
+    tag: "Fintech",
+    title: "Coastal Aquiring",
+    link: "https://portal.coastalacquiring.com/login?step=signIn",
+    before:
+      "A fast-growing product with tangled systems, too many moving parts, and shipping friction.",
     after:
-      "We migrated to microservices, reduced load times to 1.2s, and lowered checkout abandonment to 23%.",
-    metric: "3x Revenue Increase",
+      "We rebuilt key flows end to end, unified the stack, sharpened delivery pipelines, and turned a complex platform into something faster, cleaner, and easier to scale.",
+    metric: "From Friction to Flow",
     color: "border-primary/30 hover:border-primary",
     accentColor: "text-primary bg-primary/10",
   },
   {
-    tag: "SaaS Platform",
-    title: "DataFlowHQ",
+    tag: "E-Commerce",
+    title: "Grublify",
+    link: "https://www.grublify.com/",
     before:
-      "A tangled React codebase with 400+ components, no design system, and 40s build times.",
+      "A large, tangled codebase was slowing delivery, with duplicated logic across storefront, admin, and backend services.",
     after:
-      "We built a component library, refactored state management, cut builds to 8s, and improved DX scores by 85%.",
-    metric: "85% Faster Builds",
+      "We simplified the architecture, consolidated shared flows, and cleaned up core modules without cutting product capability, so teams kept every key feature while shipping faster.",
+    metric: "Feature Complete",
     color: "border-secondary/30 hover:border-secondary",
     accentColor: "text-secondary bg-secondary/10",
   },
   {
-    tag: "Healthcare",
-    title: "MediConnect Portal",
+    tag: "Web Platform",
+    title: "FM Flow",
+    link: "https://fmflow.com/",
     before:
-      "Patient portal failing accessibility audits with a WCAG score of 34% and security vulnerabilities.",
+      "A growing product with legacy UI patterns, uneven component quality, and a monorepo that was hard to scale cleanly.",
     after:
-      "We achieved 100% WCAG AA compliance, resolved all critical CVEs, and improved patient satisfaction by 60%.",
-    metric: "100% Accessible",
+      "We introduced Next.js and Nx to better structure the monorepo, organize shared code, and improve load performance, while modernizing core frontend/backend workflows so the team shipped faster with more consistency.",
+    metric: "Organized and Fast",
     color: "border-accent/30 hover:border-accent",
     accentColor: "text-accent-foreground bg-accent/10",
   },
@@ -81,6 +85,7 @@ export function CaseStudies() {
 function CaseCard({
   tag,
   title,
+  link,
   before,
   after,
   metric,
@@ -89,6 +94,7 @@ function CaseCard({
 }: {
   tag: string
   title: string
+  link?: string
   before: string
   after: string
   metric: string
@@ -104,7 +110,21 @@ function CaseCard({
         {tag}
       </div>
 
-      <h3 className="font-serif text-2xl font-bold text-card-foreground">{title}</h3>
+      <h3 className="font-serif text-2xl font-bold text-card-foreground">
+        {link ? (
+          <a
+            href={link}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+          >
+            {title}
+            <ArrowUpRight size={18} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
+        ) : (
+          title
+        )}
+      </h3>
 
       {/* Before/After */}
       <div className="mt-6 flex flex-col gap-4">
@@ -123,7 +143,7 @@ function CaseCard({
       </div>
 
       {/* Metric pill */}
-      <div className="mt-6 flex items-center gap-2">
+      <div className="mt-auto flex items-center gap-2 pt-6 pr-24">
         <div className="h-2 w-2 rounded-full bg-secondary" />
         <span className="font-serif text-lg font-bold text-foreground">{metric}</span>
       </div>

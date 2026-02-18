@@ -1,20 +1,14 @@
 import { ArrowDown } from "lucide-react"
 
 export function Hero() {
+  const tickerItems = Array.from({ length: 8 }, () => "Untanglit")
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-20">
       {/* Decorative tangled SVG lines */}
       <DecorativeTangles />
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
-        {/* Pill badge */}
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2">
-          <span className="inline-block h-2 w-2 rounded-full bg-secondary" />
-          <span className="text-sm font-medium text-muted-foreground">
-            Web consulting for wonderfully tangled projects
-          </span>
-        </div>
-
         <h1 className="font-serif text-5xl font-bold leading-tight tracking-tight text-foreground md:text-7xl lg:text-8xl">
           <span className="text-balance">We untangle your </span>
           <span className="relative inline-block">
@@ -60,7 +54,7 @@ export function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 translate-y-4 animate-float">
         <a
           href="#services"
           className="flex flex-col items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
@@ -73,14 +67,18 @@ export function Hero() {
 
       {/* Marquee ticker */}
       <div className="absolute bottom-20 left-0 right-0 overflow-hidden opacity-[0.06]">
-        <div className="animate-marquee flex whitespace-nowrap">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <span
-              key={i}
-              className="mx-8 font-serif text-7xl font-black uppercase tracking-tighter text-foreground md:text-9xl"
-            >
-              Untanglit
-            </span>
+        <div className="animate-marquee-slow flex w-max whitespace-nowrap">
+          {[0, 1].map((track) => (
+            <div key={track} aria-hidden={track === 1} className="flex shrink-0 items-center gap-16 pr-16">
+              {tickerItems.map((item, i) => (
+                <span
+                  key={`${track}-${i}`}
+                  className="font-serif text-7xl font-black uppercase tracking-tighter text-foreground md:text-9xl"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
           ))}
         </div>
       </div>

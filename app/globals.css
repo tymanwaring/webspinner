@@ -112,6 +112,56 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Small red blobby cursor */
+html,
+body,
+body * {
+  cursor: url('/cursor-blob.svg') 10 10, auto;
+}
+
+/* Cute text cursor for readable/editable text */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+blockquote,
+figcaption,
+td,
+th,
+code,
+pre,
+small,
+label,
+input:not([type='button']):not([type='submit']):not([type='reset']):not([type='checkbox']):not([type='radio']),
+textarea,
+[contenteditable='true'] {
+  cursor: url('/cursor-text.svg') 12 12, text;
+}
+
+/* Cute finger pointer for clickable UI */
+a,
+button,
+summary,
+[role='button'],
+input[type='button'],
+input[type='submit'],
+input[type='reset'],
+select,
+option {
+  cursor: url('/cursor-pointer.svg') 9 1, pointer;
+}
+
+a *,
+button *,
+summary *,
+[role='button'] * {
+  cursor: inherit;
+}
+
 /* Custom marquee animation */
 @keyframes marquee {
   0% { transform: translateX(0); }
@@ -119,7 +169,13 @@ html {
 }
 
 .animate-marquee {
-  animation: marquee 25s linear infinite;
+  animation: marquee 70s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-slow {
+  animation: marquee 160s linear infinite;
+  will-change: transform;
 }
 
 /* Tangled line drawing animation */
