@@ -11,7 +11,7 @@ const items = [
 
 export function MarqueeBand() {
   return (
-    <div className="overflow-hidden border-y border-border bg-primary py-4">
+    <div className="relative z-10 overflow-hidden border-y border-border bg-primary py-4">
       <div className="animate-marquee flex w-max whitespace-nowrap">
         {[0, 1].map((track) => (
           <div key={track} aria-hidden={track === 1} className="flex shrink-0">

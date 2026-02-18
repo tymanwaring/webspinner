@@ -1,6 +1,5 @@
 import { Navigation } from "@/components/navigation"
 import { Hero } from "@/components/hero"
-import { MarqueeBand } from "@/components/marquee-band"
 import { Services } from "@/components/services"
 import { About } from "@/components/about"
 import { CaseStudies } from "@/components/case-studies"
@@ -13,7 +12,6 @@ export default function Home() {
       <Navigation />
       <main>
         <Hero />
-        <MarqueeBand />
         <Services />
         <About />
         <CaseStudies />

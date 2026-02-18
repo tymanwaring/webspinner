@@ -2,9 +2,19 @@ import { ArrowDown } from "lucide-react"
 
 export function Hero() {
   const tickerItems = Array.from({ length: 8 }, () => "Untanglit")
+  const bandItems = [
+    "Code Detangling",
+    "Architecture Unraveling",
+    "Performance Untying",
+    "UX Unknotting",
+    "API & Data Stitching",
+    "SEO Straightening",
+    "Design System Weaving",
+    "Migration Smoothing",
+  ]
 
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-20">
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-10">
       {/* Decorative tangled SVG lines */}
       <DecorativeTangles />
 
@@ -66,7 +76,7 @@ export function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 translate-y-4 animate-float">
+      <div className="absolute bottom-14 left-1/2 z-20 -translate-x-1/2 animate-float">
         <a
           href="#services"
           className="flex flex-col items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
@@ -78,7 +88,7 @@ export function Hero() {
       </div>
 
       {/* Marquee ticker */}
-      <div className="absolute bottom-20 left-0 right-0 overflow-hidden opacity-[0.06]">
+      <div className="absolute bottom-40 left-0 right-0 overflow-hidden opacity-[0.06]">
         <div className="animate-marquee-slow flex w-max whitespace-nowrap">
           {[0, 1].map((track) => (
             <div key={track} aria-hidden={track === 1} className="flex shrink-0 items-center gap-16 pr-16">
@@ -88,6 +98,31 @@ export function Hero() {
                   className="font-serif text-7xl font-black uppercase tracking-tighter text-foreground md:text-9xl"
                 >
                   {item}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Red marquee band */}
+      <div className="absolute right-0 bottom-0 left-0 z-20 overflow-hidden border-y border-border bg-primary py-4">
+        <div className="animate-marquee flex w-max whitespace-nowrap">
+          {[0, 1].map((track) => (
+            <div key={track} aria-hidden={track === 1} className="flex shrink-0">
+              {bandItems.map((item, i) => (
+                <span key={`${track}-${i}`} className="flex items-center gap-6 px-6">
+                  <span className="text-sm font-bold uppercase tracking-widest text-primary-foreground">
+                    {item}
+                  </span>
+                  <svg
+                    className="h-3 w-3 text-primary-foreground/40"
+                    viewBox="0 0 12 12"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <circle cx="6" cy="6" r="3" />
+                  </svg>
                 </span>
               ))}
             </div>
