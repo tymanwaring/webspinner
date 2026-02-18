@@ -14,40 +14,40 @@ export const processSteps = [
     icon: "Search" as const,
     title: "Discovery",
     description:
-      "Every great web starts with understanding the pattern our clients need. We immerse ourselves in your goals, audience, and competitive landscape to map out the perfect blueprint.",
-    tagline: "Mapping the first strands",
+      "Every successful launch starts with clarity. We align on goals, audience, constraints, and priorities so your team can make confident product decisions from day one.",
+    tagline: "Clarifying the problem",
   },
   {
     number: "02",
     icon: "PenTool" as const,
     title: "Architecture",
     description:
-      "We design the structural framework -- choosing the right technologies, defining component systems, and planning for scale so your project is built on an unshakeable foundation.",
-    tagline: "Laying the anchor threads",
+      "We design a practical technical plan -- selecting the right stack, defining component boundaries, and planning for scale so implementation stays predictable.",
+    tagline: "Designing the plan",
   },
   {
     number: "03",
     icon: "Code" as const,
-    title: "Weaving",
+    title: "Implementation",
     description:
-      "This is where craft meets code. We build your interface strand by strand -- pixel-perfect components, fluid animations, and seamless interactions woven together into a cohesive whole.",
-    tagline: "Spinning the silk",
+      "This is where strategy becomes product. We build high-quality interfaces with clean architecture, thoughtful UX, and maintainable code your team can extend confidently.",
+    tagline: "Building with confidence",
   },
   {
     number: "04",
     icon: "Sparkles" as const,
     title: "Refinement",
     description:
-      "We optimize every thread for performance, accessibility, and cross-browser consistency. Each strand is tested, tightened, and polished until it gleams.",
-    tagline: "Strengthening every connection",
+      "We harden every release for performance, accessibility, and cross-browser consistency. Critical paths are validated and polished until quality is measurable.",
+    tagline: "De-risking the release",
   },
   {
     number: "05",
     icon: "Rocket" as const,
     title: "Launch",
     description:
-      "Your web goes live. We handle deployment, monitoring, and post-launch support to ensure everything holds strong under real-world conditions.",
-    tagline: "Releasing into the wind",
+      "Your product goes live with a clear rollout plan. We support deployment, monitoring, and post-launch iteration so your team ships without fear.",
+    tagline: "Shipping with confidence",
   },
 ] as const
 
@@ -193,7 +193,7 @@ export const team = [
 export const testimonials = [
   {
     quote:
-      "Webspinner transformed our frontend from a tangled mess into a masterpiece. Their process was transparent, their code was pristine, and the results speak for themselves -- 40% faster load times and a 25% lift in conversions.",
+      "Untanglit transformed our frontend from a brittle codebase into a reliable product foundation. Their process was transparent, their code quality was excellent, and the results speak for themselves -- 40% faster load times and a 25% lift in conversions.",
     name: "Catherine Liu",
     role: "VP of Product",
     company: "Bloom Retail",
@@ -207,7 +207,7 @@ export const testimonials = [
   },
   {
     quote:
-      "We needed a patient portal that was both HIPAA-compliant and genuinely pleasant to use. Webspinner delivered on both fronts with elegance we didn't think was possible under our constraints.",
+      "We needed a patient portal that was both HIPAA-compliant and genuinely pleasant to use. Untanglit delivered on both fronts with a level of clarity and execution we did not think was possible under our constraints.",
     name: "Dr. Sarah Winters",
     role: "Chief Digital Officer",
     company: "Nexus Health",
@@ -232,7 +232,7 @@ export const socialLinks = [
   { label: "GitHub", href: "#", icon: "Github" as const },
   { label: "LinkedIn", href: "#", icon: "Linkedin" as const },
   { label: "X", href: "#", icon: "Twitter" as const },
-  { label: "Email", href: "mailto:hello@webspinner.dev", icon: "Mail" as const },
+  { label: "Email", href: "mailto:hello@untanglit.dev", icon: "Mail" as const },
 ] as const
 
 export const technologies = [

@@ -1,16 +1,21 @@
-import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import type { Metadata } from 'next'
+import { DM_Sans, Fraunces } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+})
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+})
 
 export const metadata: Metadata = {
-  title: 'Webspinner | Front-End Consulting',
-  description: 'We spin digital experiences into reality. Front-end consulting with 10+ years of craft, specializing in React, Next.js, and design systems.',
-  generator: 'v0.app',
-  keywords: ['front-end consulting', 'React', 'Next.js', 'web development', 'design systems', 'TypeScript'],
+  title: 'Untanglit | We Untangle Your Web Problems',
+  description: 'Untanglit is a quirky web consulting agency that specializes in resolving complex web problems. We turn your tangled mess into a clean, beautiful solution.',
   icons: {
     icon: [
       {
@@ -28,17 +33,6 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
-  openGraph: {
-    title: 'Webspinner | Front-End Consulting',
-    description: 'We spin digital experiences into reality. Front-end consulting with 10+ years of craft.',
-    type: 'website',
-  },
-}
-
-export const viewport: Viewport = {
-  themeColor: '#141210',
-  width: 'device-width',
-  initialScale: 1,
 }
 
 export default function RootLayout({
@@ -47,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className={`${dmSans.variable} ${fraunces.variable}`}>
       <body className="font-sans antialiased">
         {children}
         <Analytics />

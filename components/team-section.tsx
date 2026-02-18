@@ -10,8 +10,8 @@ export function TeamSection() {
     <section id="team" className="relative px-6 py-24 md:px-12 md:py-32">
       <SpringReveal>
         <SectionHeading
-          title="The Weavers"
-          subtitle="A network of skilled artisans, each bringing a unique strand of expertise to every project we take on."
+          title="The Untanglit Team"
+          subtitle="Senior specialists who combine product thinking, engineering rigor, and calm execution on every engagement."
         />
       </SpringReveal>
 

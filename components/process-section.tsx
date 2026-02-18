@@ -7,7 +7,7 @@ import {
   Sparkles,
   Rocket,
 } from "lucide-react"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useScroll, useTransform, motion, useInView } from "motion/react"
 import { processSteps } from "@/lib/data"
 import { SectionHeading } from "@/components/section-heading"
@@ -15,7 +15,10 @@ import { SpringReveal } from "@/components/spring-reveal"
 import { SilkCard } from "@/components/silk-card"
 import { useReducedMotion } from "@/lib/use-reduced-motion"
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+const iconMap: Record<
+  string,
+  React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+> = {
   Search,
   PenTool,
   Code,
@@ -25,7 +28,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 /**
  * A vertical silk thread connecting dot 1 through dot 5.
- * The container is pinned to `top: 1.25rem` and `bottom: 1.25rem`
+ * The container is pinned to `top: 1.5rem` and `bottom: 1.5rem`
  * so the SVG stretches exactly from the first to the last dot.
  * The path stays at x=50 (dead centre) with extremely subtle
  * lateral waviness so it reads as organic silk, not a rigid ruler.
@@ -33,7 +36,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
  * 5 dots at equal spacing --> y positions 0, 125, 250, 375, 500
  * with tiny control-point drift of +/-3px max.
  */
-function SilkTimeline() {
+function SilkTimeline({ topOffset, height }: { topOffset: number; height: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
   const { scrollYProgress } = useScroll({
@@ -56,7 +59,7 @@ function SilkTimeline() {
     <div
       ref={ref}
       className="pointer-events-none absolute left-6 w-[100px] md:left-1/2 md:-translate-x-[50px]"
-      style={{ top: "1.25rem", bottom: "1.25rem" }}
+      style={{ top: `${topOffset}px`, height: `${height}px` }}
       aria-hidden="true"
     >
       <svg
@@ -115,70 +118,6 @@ function SilkTimeline() {
 }
 
 /**
- * A small web-like connector between the spine and the card,
- * rendered as a curved filament rather than a straight line.
- */
-function WebFilament({
-  direction,
-  index,
-}: {
-  direction: "left" | "right"
-  index: number
-}) {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-10%" })
-  const reducedMotion = useReducedMotion()
-
-  // Organic curving filament
-  const path =
-    direction === "right"
-      ? "M 0 20 C 15 12, 40 28, 55 16 S 75 22, 90 20"
-      : "M 90 20 C 75 12, 50 28, 35 16 S 15 22, 0 20"
-
-  return (
-    <div ref={ref} className="h-10 w-24" aria-hidden="true">
-      <svg viewBox="0 0 90 40" fill="none" className="h-full w-full">
-        <defs>
-          <filter id={`fil-glow-${direction}-${index}`}>
-            <feGaussianBlur stdDeviation="1" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <motion.path
-          d={path}
-          stroke="var(--node-color)"
-          strokeWidth={0.6}
-          strokeLinecap="round"
-          fill="none"
-          filter={`url(#fil-glow-${direction}-${index})`}
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={
-            isInView
-              ? { pathLength: 1, opacity: 0.25 }
-              : { pathLength: 0, opacity: 0 }
-          }
-          transition={
-            reducedMotion
-              ? { duration: 0 }
-              : {
-                  pathLength: {
-                    duration: 0.8,
-                    delay: index * 0.12,
-                    ease: "easeOut",
-                  },
-                  opacity: { duration: 0.3, delay: index * 0.12 },
-                }
-          }
-        />
-      </svg>
-    </div>
-  )
-}
-
-/**
  * A web-junction node that pulses when in view.
  */
 function WebNode() {
@@ -207,20 +146,62 @@ function WebNode() {
 }
 
 export function ProcessSection() {
+  const listRef = useRef<HTMLDivElement>(null)
+  const firstNodeRef = useRef<HTMLDivElement>(null)
+  const lastNodeRef = useRef<HTMLDivElement>(null)
+  const [timelineBounds, setTimelineBounds] = useState({ top: 24, height: 0 })
+
+  useEffect(() => {
+    const updateTimelineBounds = () => {
+      const list = listRef.current
+      const firstNode = firstNodeRef.current
+      const lastNode = lastNodeRef.current
+      const timelineParent = list?.parentElement
+
+      if (!timelineParent || !firstNode || !lastNode) return
+
+      const parentRect = timelineParent.getBoundingClientRect()
+      const firstRect = firstNode.getBoundingClientRect()
+      const lastRect = lastNode.getBoundingClientRect()
+
+      const firstCenter = firstRect.top - parentRect.top + firstRect.height / 2
+      const lastCenter = lastRect.top - parentRect.top + lastRect.height / 2
+      const measuredHeight = Math.max(lastCenter - firstCenter, 0)
+
+      setTimelineBounds({ top: firstCenter, height: measuredHeight })
+    }
+
+    updateTimelineBounds()
+
+    const resizeObserver = new ResizeObserver(updateTimelineBounds)
+    if (listRef.current) resizeObserver.observe(listRef.current)
+    if (firstNodeRef.current) resizeObserver.observe(firstNodeRef.current)
+    if (lastNodeRef.current) resizeObserver.observe(lastNodeRef.current)
+    window.addEventListener("resize", updateTimelineBounds)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener("resize", updateTimelineBounds)
+    }
+  }, [])
+
   return (
     <section id="process" className="relative px-6 py-24 md:px-12 md:py-32">
       <SpringReveal>
         <SectionHeading
-          title="How We Spin Your Web"
-          subtitle="Our process is deliberate and transparent -- five interlocking phases that transform your vision into a polished, production-ready interface."
+          title="How We Remove Delivery Anxiety"
+          subtitle="Our process is deliberate and transparent -- five practical phases that move your team from uncertainty to a polished, production-ready interface."
         />
       </SpringReveal>
 
       <div className="relative mx-auto max-w-4xl">
         {/* Winding silk thread timeline replacing the old straight line */}
-        <SilkTimeline />
+        <SilkTimeline
+          topOffset={timelineBounds.top}
+          height={timelineBounds.height}
+        />
 
-        <div className="flex flex-col gap-16">
+        <div ref={listRef} className="flex flex-col gap-16">
           {processSteps.map((step, index) => {
             const Icon = iconMap[step.icon]
             const isEven = index % 2 === 0
@@ -242,23 +223,15 @@ export function ProcessSection() {
                   <div
                     className="absolute left-4 top-4 md:left-1/2 md:-translate-x-1/2"
                     aria-hidden="true"
+                    ref={
+                      index === 0
+                        ? firstNodeRef
+                        : index === processSteps.length - 1
+                          ? lastNodeRef
+                          : undefined
+                    }
                   >
                     <WebNode />
-                  </div>
-
-                  {/* Web filament connector */}
-                  <div
-                    className={`hidden md:block absolute top-3 ${
-                      isEven
-                        ? "left-[calc(50%+8px)]"
-                        : "right-[calc(50%+8px)] scale-x-[-1]"
-                    }`}
-                    aria-hidden="true"
-                  >
-                    <WebFilament
-                      direction={isEven ? "right" : "left"}
-                      index={index}
-                    />
                   </div>
 
                   {/* Card */}

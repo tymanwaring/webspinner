@@ -9,7 +9,7 @@ interface HourglassIconProps {
 }
 
 /**
- * Black Widow Hourglass -- the brand icon for Webspinner.
+ * Black Widow Hourglass -- the brand icon for Untanglit.
  * A stylised hourglass (the red marking on a black widow spider)
  * rendered in SVG with an optional entrance animation.
  */

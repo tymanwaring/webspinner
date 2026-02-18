@@ -27,8 +27,8 @@ export function ServicesSection() {
     <section id="services" className="relative px-6 py-24 md:px-12 md:py-32">
       <SpringReveal>
         <SectionHeading
-          title="Threads of Expertise"
-          subtitle="Each service we offer is a strand of deep specialization -- woven together, they form a complete web of front-end capability."
+          title="Focused Expertise, Clear Outcomes"
+          subtitle="Each service is designed to reduce risk, increase team velocity, and deliver reliable front-end outcomes."
         />
       </SpringReveal>
 

@@ -13,8 +13,8 @@ export function TestimonialsSection() {
     >
       <SpringReveal>
         <SectionHeading
-          title="From Those We've Woven For"
-          subtitle="Our clients' words carry more weight than our own. Here is what they have to say about working with Webspinner."
+          title="What Clients Say"
+          subtitle="Our clients' words carry more weight than our own. Here is what they have to say about working with Untanglit."
         />
       </SpringReveal>
 

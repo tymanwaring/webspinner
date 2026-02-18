@@ -44,7 +44,7 @@ export function AboutSection() {
   return (
     <section id="about" className="relative px-6 py-24 md:px-12 md:py-32">
       <SpringReveal>
-        <SectionHeading title="About Webspinner" />
+        <SectionHeading title="About Untanglit" />
       </SpringReveal>
 
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-16">
@@ -52,23 +52,20 @@ export function AboutSection() {
         <SpringReveal delay={0.1}>
           <div className="flex flex-col gap-6 text-base leading-relaxed text-muted-foreground">
             <p>
-              Like a master weaver, we have spent a decade perfecting our craft.
-              What began as a solo passion for building beautiful interfaces has
-              evolved into a tight-knit collective of specialists who share one
-              conviction: the front end is where your users fall in love with your
-              product.
+              Untanglit exists for teams that feel blocked by unclear requirements,
+              fragile front-end code, or delivery chaos. We bring senior
+              engineering leadership and a calm, structured process that removes
+              guesswork from product delivery.
             </p>
             <p>
-              We do not just write code -- we architect experiences. Every
-              component, every interaction, every millisecond of load time is a
-              thread in the larger tapestry of your brand. Our consulting model
-              means you get senior-level expertise from day one, without the
-              overhead of scaling an internal team.
+              We do not just write components -- we reduce risk. Our work focuses
+              on architecture clarity, measurable performance, and accessible user
+              flows your team can maintain long after launch.
             </p>
             <p>
-              From Fortune 500 dashboards to Y Combinator launches, we have
-              spun webs that withstand the traffic, complexity, and ambition of
-              the most demanding projects. Let us weave yours next.
+              From enterprise dashboards to startup launches, we help clients ship
+              with confidence through practical planning, transparent communication,
+              and consistent execution.
             </p>
           </div>
         </SpringReveal>

@@ -1,43 +1,24 @@
-import { NavHeader } from "@/components/nav-header"
-import { HeroSection } from "@/components/hero-section"
-import { ProcessSection } from "@/components/process-section"
-import { AboutSection } from "@/components/about-section"
-import { ServicesSection } from "@/components/services-section"
-import { PortfolioSection } from "@/components/portfolio-section"
-import { TeamSection } from "@/components/team-section"
-import { TestimonialsSection } from "@/components/testimonials-section"
-import { ContactSection } from "@/components/contact-section"
+import { Navigation } from "@/components/navigation"
+import { Hero } from "@/components/hero"
+import { MarqueeBand } from "@/components/marquee-band"
+import { Services } from "@/components/services"
+import { About } from "@/components/about"
+import { CaseStudies } from "@/components/case-studies"
+import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
-import { SilkThreadSpine } from "@/components/silk-thread-spine"
-import { WebBackground } from "@/components/web-background"
 
-export default function Page() {
+export default function Home() {
   return (
     <>
-      {/* Ambient spider web canvas background */}
-      <WebBackground />
-
-      {/* Scroll-linked silk thread SVG overlay */}
-      <SilkThreadSpine />
-
-      {/* Navigation */}
-      <NavHeader />
-
-      {/* Main content */}
-      <main className="relative z-10">
-        <HeroSection />
-
-        <div className="relative">
-          <ProcessSection />
-          <AboutSection />
-          <ServicesSection />
-          <PortfolioSection />
-          <TeamSection />
-          <TestimonialsSection />
-          <ContactSection />
-        </div>
+      <Navigation />
+      <main>
+        <Hero />
+        <MarqueeBand />
+        <Services />
+        <About />
+        <CaseStudies />
+        <Contact />
       </main>
-
       <Footer />
     </>
   )

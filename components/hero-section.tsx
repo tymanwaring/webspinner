@@ -85,26 +85,24 @@ export function HeroSection() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          Webspinner
+          Untanglit
         </motion.span>
 
         {/* Heading */}
         <h1 className="text-4xl font-bold leading-tight tracking-tight text-foreground md:text-5xl lg:text-6xl text-balance">
-          We{" "}
-          <span style={{ color: "var(--node-color)" }}>spin</span> digital
-          experiences into reality
+          Untangle complex front ends and ship with confidence
         </h1>
 
         {/* Subtitle */}
         <p className="text-lg text-muted-foreground md:text-xl">
-          Front-end consulting with 10+ years of craft
+          Senior front-end consulting with 10+ years of delivery experience
         </p>
 
         {/* Intro */}
         <p className="max-w-xl text-base leading-relaxed text-muted-foreground">
-          We partner with ambitious companies to architect, build, and refine
-          world-class web interfaces. Every strand of code is woven with purpose
-          -- performance, accessibility, and delight baked into every pixel.
+          We help ambitious teams untangle architecture, interactions, and
+          delivery workflows so products launch faster, perform better, and stay
+          maintainable as they scale.
         </p>
 
         {/* CTAs */}
@@ -115,7 +113,7 @@ export function HeroSection() {
               size="lg"
               className="bg-accent text-accent-foreground hover:bg-accent/85"
             >
-              <a href="#process">See Our Process</a>
+              <a href="#process">See the Approach</a>
             </Button>
           </MagneticWrapper>
           <MagneticWrapper>
@@ -125,7 +123,7 @@ export function HeroSection() {
               size="lg"
               className="border-border text-foreground hover:bg-muted"
             >
-              <a href="#contact">Start a Project</a>
+              <a href="#contact">Start Your Project</a>
             </Button>
           </MagneticWrapper>
         </div>

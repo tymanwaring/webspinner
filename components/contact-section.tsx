@@ -42,8 +42,8 @@ export function ContactSection() {
     <section id="contact" className="relative px-6 py-24 md:px-12 md:py-32">
       <SpringReveal>
         <SectionHeading
-          title="Start Spinning"
-          subtitle="Ready to weave something exceptional? Tell us about your project and we will respond within 24 hours."
+          title="Let's Untangle Your Front End"
+          subtitle="Tell us about your project and we will map a clear path forward. You will hear back within 24 hours."
         />
       </SpringReveal>
 
@@ -196,11 +196,11 @@ export function ContactSection() {
                 Prefer to reach out directly?
               </h3>
               <a
-                href="mailto:hello@webspinner.dev"
+                href="mailto:hello@untanglit.dev"
                 className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 <Mail className="h-4 w-4" />
-                hello@webspinner.dev
+                hello@untanglit.dev
               </a>
             </div>
 

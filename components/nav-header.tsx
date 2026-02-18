@@ -44,11 +44,11 @@ export function NavHeader() {
       <a
         href="#"
         className="group flex items-center gap-2.5"
-        aria-label="Webspinner - Back to top"
+        aria-label="Untanglit - Back to top"
       >
         <HourglassIcon size={28} animated={false} />
         <span className="text-xl font-bold tracking-tight text-foreground">
-          Webspinner
+          Untanglit
         </span>
       </a>
 
@@ -82,7 +82,7 @@ export function NavHeader() {
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2 text-foreground">
               <HourglassIcon size={22} animated={false} />
-              Webspinner
+              Untanglit
             </SheetTitle>
           </SheetHeader>
           <nav className="flex flex-col gap-2 p-4" aria-label="Mobile navigation">
