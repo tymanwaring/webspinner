@@ -362,7 +362,7 @@ Thanks!`
                     onChange={(e) => updateField("phone", e.target.value)}
                     aria-invalid={Boolean(formErrors.phone)}
                     className={`${fieldBaseClass} ${formErrors.phone ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
-                    placeholder="760 484 4845"
+                    placeholder="(123) 456-7890"
                   />
                   {formErrors.phone && (
                     <p className="text-xs font-serif text-primary">{formErrors.phone}</p>
