@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
+import { BrandKnotIcon } from "@/components/brand-knot-icon"
 
 const navLinks = [
   { label: "Services", href: "#services" },
@@ -18,7 +19,7 @@ export function Navigation() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2 hover-wiggle">
-          <TangledLogo />
+          <BrandKnotIcon size={36} animated />
           <span className="font-serif text-2xl font-bold tracking-tight text-foreground">
             Untanglit
           </span>
@@ -84,28 +85,5 @@ export function Navigation() {
         </div>
       )}
     </header>
-  )
-}
-
-function TangledLogo() {
-  return (
-    <svg
-      width="36"
-      height="36"
-      viewBox="0 0 36 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="animate-untangle"
-      aria-hidden="true"
-    >
-      <circle cx="18" cy="18" r="16" stroke="currentColor" strokeWidth="1.5" className="text-primary" opacity="0.3" />
-      <path
-        d="M10 18C10 14 14 10 18 10C22 10 26 14 26 18C26 22 22 26 18 26C14 26 12 23 14 20C16 17 20 16 22 18C24 20 22 24 18 24"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        className="text-primary"
-      />
-    </svg>
   )
 }

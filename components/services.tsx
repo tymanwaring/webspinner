@@ -45,6 +45,15 @@ const services = [
   },
 ]
 
+const knotVariants = [
+  "M8 16C8 12 12 8 16 8C20 8 24 12 24 16C24 20 20 24 16 24C12 24 9 21 10 18C11 15 15 14 17 16",
+  "M8 12C8 9.8 9.8 8 12 8C14.2 8 16 9.8 16 12C16 14.2 14.2 16 12 16C9.8 16 8 17.8 8 20C8 22.2 9.8 24 12 24C14.2 24 16 22.2 16 20C16 17.8 17.8 16 20 16C22.2 16 24 14.2 24 12C24 9.8 22.2 8 20 8C17.8 8 16 9.8 16 12",
+  "M8 18C10 14 12 12 14 12C16 12 18 14 20 18C22 22 24 20 24 16C24 12 21 8 17 8C13 8 10 10 8 14",
+  "M8 10C10 8 14 8 16 10C18 12 18 15 16 17C14 19 10 19 8 21M24 10C22 8 18 8 16 10C14 12 14 15 16 17C18 19 22 19 24 21",
+  "M8 20C8 16 12 12 16 12C20 12 24 16 24 20M8 12C8 9.8 9.8 8 12 8C14.2 8 16 9.8 16 12",
+  "M8 12C8 9.8 9.8 8 12 8C14.2 8 16 9.8 16 12C16 14.2 14.2 16 12 16C9.8 16 8 17.8 8 20C8 22.2 9.8 24 12 24C15 24 17 22 18 20C19 18 20 16 22 16C23.1 16 24 16.9 24 18",
+]
+
 export function Services() {
   return (
     <section id="services" className="relative py-24 md:py-32">
@@ -65,8 +74,12 @@ export function Services() {
 
         {/* Services grid */}
         <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => (
-            <ServiceCard key={service.title} {...service} />
+          {services.map((service, index) => (
+            <ServiceCard
+              key={service.title}
+              {...service}
+              knotPath={knotVariants[index % knotVariants.length]}
+            />
           ))}
         </div>
       </div>
@@ -79,11 +92,13 @@ function ServiceCard({
   title,
   description,
   color,
+  knotPath,
 }: {
   icon: React.ComponentType<{ size?: number }>
   title: string
   description: string
   color: string
+  knotPath: string
 }) {
   return (
     <div className="group relative rounded-2xl border border-border bg-card p-8 transition-all hover:border-primary/30 hover:shadow-lg hover:-translate-y-1">
@@ -105,10 +120,11 @@ function ServiceCard({
         aria-hidden="true"
       >
         <path
-          d="M8 16C8 12 12 8 16 8C20 8 24 12 24 16C24 20 20 24 16 24"
+          d={knotPath}
           stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </div>
