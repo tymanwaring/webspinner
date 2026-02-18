@@ -25,7 +25,19 @@ export function Hero() {
                 strokeWidth="3"
                 strokeLinecap="round"
                 className="text-accent"
-              />
+              >
+                <animate
+                  attributeName="d"
+                  dur="5.2s"
+                  repeatCount="indefinite"
+                  values="
+                    M2 8C30 2 60 10 100 5C140 0 170 9 198 4;
+                    M2 6C32 11 62 2 100 7C138 12 170 2 198 7;
+                    M2 9C30 4 60 11 100 6C140 2 170 10 198 5;
+                    M2 8C30 2 60 10 100 5C140 0 170 9 198 4
+                  "
+                />
+              </path>
             </svg>
           </span>
           <br />

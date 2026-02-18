@@ -7,7 +7,7 @@ import { BrandKnotIcon } from "@/components/brand-knot-icon"
 const navLinks = [
   { label: "Services", href: "#services" },
   { label: "How We Untangle", href: "#about" },
-  { label: "Knots We Fixed", href: "#cases" },
+  { label: "Knots We've Untied", href: "#cases" },
   { label: "Contact", href: "#contact" },
 ]
 
