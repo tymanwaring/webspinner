@@ -18,9 +18,9 @@ const steps = [
   {
     number: "03",
     icon: Sparkles,
-    title: "Polish the Flow",
+    title: "Polish & Smooth",
     description:
-      "We refine code, UX, and performance until everything feels clean, fast, and delightfully usable.",
+      "Once untangled, we refine. Clean code, clear documentation, optimized performance, and beautiful interfaces.",
   },
   {
     number: "04",
@@ -34,8 +34,8 @@ const steps = [
 const stats = [
   { value: "200+", label: "Knots Untied" },
   { value: "98%", label: "Client Satisfaction" },
-  { value: "12", label: "Years Untangling" },
-  { value: "50+", label: "Happy Teams" },
+  { value: "12", label: "Years Detangling" },
+  { value: "50+", label: "Happy Clients" },
 ]
 
 export function About() {
@@ -49,17 +49,18 @@ export function About() {
               About Us
             </span>
             <h2 className="mt-4 font-serif text-4xl font-bold tracking-tight md:text-5xl text-balance">
-              We thrive in tangles others avoid.
+              We thrive in the tangles others avoid.
             </h2>
           </div>
           <div className="flex flex-col justify-center">
             <p className="text-lg leading-relaxed text-primary-foreground/70">
-              Untanglit was built for the projects that make most teams say, "We'll deal with that later."
-              We love the tricky stuff: fragile systems, tangled architecture, and UX that needs a rescue mission.
+              Untanglit was born from frustration. We kept seeing brilliant businesses held back by
+              messy code, convoluted architectures, and web experiences that made users cringe. So we
+              built a team of problem-solvers who love the complicated stuff. The gnarlier the knot,
+              the bigger our grins.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-primary-foreground/70">
-              We're part strategist, part builder, part detective. We work closely with your team and leave
-              things cleaner, clearer, and easier to run.
+              {"We're not just consultants \u2014 we're detectives, architects, and craftspeople who get genuine joy from making things work beautifully."}
             </p>
           </div>
         </div>
